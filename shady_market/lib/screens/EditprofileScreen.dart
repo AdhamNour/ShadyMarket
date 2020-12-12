@@ -5,6 +5,7 @@ import 'package:shady_market/screens/ProductsScreen.dart';
 import 'package:shady_market/widgets/URLImagePicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shady_market/API.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const routeName = '/EditProfileScreen';
@@ -36,7 +37,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (!isValid) {
       return;
     }
-    //TODO: implement the save function
+    //TODO: Test The API
+    var responce = await updateProfile(
+        Name: nameController.text,
+        Location: location,
+        Pic: imageURLController.text);
+    if (responce['success']) {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Successful Update")));
+    } else {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Failed Update")));
+    }
+    Navigator.of(context).pop();
+  }
+
+  void saveCredit(value) async {
+    //TODO: Test API
+    var responce = await updateCredit(currentUser.credit + double.parse(value));
+    if (responce['success']) {
+      currentUser.credit += double.parse(value);
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Successful Update")));
+    } else {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Failed Update")));
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -186,8 +213,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ).then((value) {
                           if (value != null) {
-                            currentUser.credit += double.parse(value);
-                            //TODO: Update the db
+                            //TODO: Test the API
+                            saveCredit(value);
                           }
                         });
                       },

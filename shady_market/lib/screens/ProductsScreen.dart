@@ -15,7 +15,7 @@ class ProductsScreen extends StatelessWidget {
             (new Random()).nextInt(10000).toInt(),
             (new Random()).nextInt(10000),
             (new Random()).nextInt(10000).toString(),
-            'https://initiate.alphacoders.com/download/wallpaper/crop-or-stretch/769160/cropped-300-300-769160.jpg/695763090829240',
+            'https://avatarfiles.alphacoders.com/200/200652.jpg',
             (new Random()).nextInt(10000).toString(),
             (new Random()).nextInt(10000).toString(),
             (new Random()).nextDouble(),
@@ -29,10 +29,39 @@ class ProductsScreen extends StatelessWidget {
         actions: [
           IconButton(
               icon: Icon(Icons.search),
-              onPressed: null), //TODO: add searching function here
-          IconButton(
-              icon: Icon(Icons.filter),
-              onPressed: null) //TODO  add fillter functionality here
+              onPressed: () {
+                TextEditingController controller = TextEditingController();
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    actions: [
+                      FlatButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).pop(controller.text);
+                          },
+                          icon: Icon(Icons.add_circle),
+                          label: Text("search")),
+                      FlatButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).pop(null);
+                          },
+                          icon: Icon(Icons.cancel),
+                          label: Text('cancel'))
+                    ],
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('search about:'),
+                        TextField(controller: controller)
+                      ],
+                    ),
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    //TODO: send search request
+                  }
+                });
+              }),
         ],
       ),
       body: GridView.builder(

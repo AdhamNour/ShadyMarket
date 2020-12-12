@@ -7,6 +7,10 @@ import 'package:shady_market/screens/EditProductScreen.dart';
 import 'package:shady_market/widgets/SABT.dart';
 
 import '../DATA.dart';
+import '../DATA.dart';
+import 'package:shady_market/API.dart';
+
+import '../DATA.dart';
 /**
  * this screen has the following job
  * 1. showing product 
@@ -35,8 +39,6 @@ class _ProductScreenState extends State<ProductScreen>
     return degree / unitRadial;
   }
 
-  final isOwner = (new Random()).nextBool(); //FIXME
-
   @override
   void initState() {
     animationController =
@@ -52,6 +54,7 @@ class _ProductScreenState extends State<ProductScreen>
   @override
   Widget build(BuildContext context) {
     Product _product = ModalRoute.of(context).settings.arguments as Product;
+    final isOwner = (currentUser.id == _product.owner_Id);
 
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -83,23 +86,35 @@ class _ProductScreenState extends State<ProductScreen>
                             Icon(Icons.shopping_cart),
                             Colors.deepOrange,
                             onClick: () {
-                              //addToCart(context, _product);
-                              //TODO add to cart to be implemented
-
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: Text("CheckOut"),
                                   actions: [
                                     FlatButton.icon(
-                                        onPressed: () {
-                                          //TODO: Send to DB the product Data
-                                          currentUser.credit -=
-                                              _product.quantity *
+                                        onPressed: () async {
+                                          //TODO: Test API
+                                          var responce = await buyProduct(
+                                              product: _product.id,
+                                              quantity: 1);
+                                          if (responce['success']) {
+                                            setState(() {
+                                              currentUser.credit -=
                                                   _product.price;
-                                          _product.quantity--;
-                                          Navigator.of(context)
-                                              .pop(); //For Showing Transactions
+                                              _product.quantity--;
+                                            });
+                                            Scaffold.of(context).showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Successful Purchase")));
+                                          } else {
+                                            Scaffold.of(context).showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Failed Purchase")));
+                                          }
+                                          Navigator.of(context).pop();
+                                          //For Showing Transactions
                                         },
                                         icon: Icon(Icons.done),
                                         label: Text("OK")),
@@ -108,7 +123,7 @@ class _ProductScreenState extends State<ProductScreen>
                                           Navigator.of(context)
                                               .pop(); //For Showing Transactions
                                         },
-                                        icon: Icon(Icons.cancel_outlined),
+                                        icon: Icon(Icons.cancel),
                                         label: Text('Cancel'))
                                   ],
                                   content: Text("Are You Sure????!!!"),

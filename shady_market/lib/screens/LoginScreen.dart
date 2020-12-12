@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../API.dart';
+import '../DATA.dart';
+import '../model/Person.dart';
 import 'ProductsScreen.dart';
 
 class Login extends StatefulWidget {
@@ -28,7 +30,7 @@ class _LoginState extends State<Login> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
+            RaisedButton(
               child: Text('close'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -55,7 +57,7 @@ class _LoginState extends State<Login> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
+            RaisedButton(
               child: Text('close'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -139,6 +141,13 @@ class _LoginState extends State<Login> {
                           dynamic data =
                               await loginUser(userName.text, userPassword.text);
                           if (data["message"].contains("success")) {
+                            currentUser = Person(
+                                id: data['data']['ID'],
+                                email: data['data']['email'],
+                                credit: data['data']['Credit'],
+                                location: data['data']['location'],
+                                name: data['data']['Name'],
+                                pic: data['data']['pic']);
                             Navigator.pushNamed(
                                 context, ProductsScreen.routeName);
                           }
@@ -187,8 +196,6 @@ class _LoginState extends State<Login> {
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       ),
                     ),
-
-                    //TODO:
                     SizedBox(
                       width: double.maxFinite,
                       child: RaisedButton(
@@ -203,7 +210,7 @@ class _LoginState extends State<Login> {
                           side: BorderSide(color: Colors.black),
                         ),
                         child: Text(
-                          "change screen",
+                          "home screen",
                           style: TextStyle(fontSize: 10, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),

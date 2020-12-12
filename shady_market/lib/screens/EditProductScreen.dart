@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shady_market/model/Product.dart';
 import 'package:shady_market/widgets/URLImagePicker.dart';
 import 'package:validators/validators.dart';
+import 'package:shady_market/API.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const String routeName = '/EditProductScreen';
@@ -32,7 +33,24 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid) {
       return;
     }
-    //TODO: implement the save function
+    //TODO: Test API
+    var responce = await updateProduct(
+        description: descriptionController.text,
+        id: editingProduct.id.toString(),
+        name: nameController.text,
+        pic: imageURLController.text,
+        price: priceController.text,
+        quantity: editingProduct.quantity.toString());
+    if (responce['success']) {
+      
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Successful Editing")));
+    } else {
+      
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Failed Editing")));
+    }
+    Navigator.of(context).pop();
   }
 
   @override
