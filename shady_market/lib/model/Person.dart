@@ -1,5 +1,8 @@
 class Person {
-  final id, email, pass, pic, credit, location, name;
+  final id, email, pass;
+  String pic, location;
+  double credit;
+  String name;
 
   Person(
       {this.id,

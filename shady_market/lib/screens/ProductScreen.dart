@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shady_market/model/Product.dart';
 import 'package:shady_market/screens/EditProductScreen.dart';
 import 'package:shady_market/widgets/SABT.dart';
+
+import '../DATA.dart';
 /**
  * this screen has the following job
  * 1. showing product 
@@ -49,8 +51,7 @@ class _ProductScreenState extends State<ProductScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Product _product =
-        ModalRoute.of(context).settings.arguments as Product;
+    Product _product = ModalRoute.of(context).settings.arguments as Product;
 
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -84,7 +85,35 @@ class _ProductScreenState extends State<ProductScreen>
                             onClick: () {
                               //addToCart(context, _product);
                               //TODO add to cart to be implemented
-                              print(isOwner);
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("CheckOut"),
+                                  actions: [
+                                    FlatButton.icon(
+                                        onPressed: () {
+                                          //TODO: Send to DB the product Data
+                                          currentUser.credit -=
+                                              _product.quantity *
+                                                  _product.price;
+                                          _product.quantity--;
+                                          Navigator.of(context)
+                                              .pop(); //For Showing Transactions
+                                        },
+                                        icon: Icon(Icons.done),
+                                        label: Text("OK")),
+                                    FlatButton.icon(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); //For Showing Transactions
+                                        },
+                                        icon: Icon(Icons.cancel_outlined),
+                                        label: Text('Cancel'))
+                                  ],
+                                  content: Text("Are You Sure????!!!"),
+                                ),
+                              );
                             },
                           ),
                         )),

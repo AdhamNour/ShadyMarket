@@ -4,6 +4,7 @@ import 'package:shady_market/screens/ProductScreen.dart';
 import 'package:shady_market/screens/ProductsScreen.dart';
 import 'package:shady_market/screens/TransactionsScreen.dart';
 import 'package:shady_market/screens/profileScreen.dart';
+import 'package:shady_market/screens/EditprofileScreen.dart';
 
 import 'screens/LoginScreen.dart';
 
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         EditProductScreen.routeName: (ctx) => EditProductScreen(),
         TransactionsScreen.routeName: (ctx) => TransactionsScreen(),
         ProfileScreen.routeName: (ctx) => ProfileScreen(),
+        EditProfileScreen.routeName: (ctx) => EditProfileScreen(),
       },
     );
   }

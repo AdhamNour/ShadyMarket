@@ -5,16 +5,6 @@ import "package:shady_market/model/Person.dart";
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/ProfileScreen';
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -34,14 +24,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             //Name
             Text(
-              'Profile Name:' + user.name,
+              'Profile Name:' + user.name.toString(),
             ),
             //Email
-            Text('Location:' + user.email),
+            Text('Email:' + user.email.toString()),
             //Location
-            Text('Location:' + user.location),
+            Text('Location:' + user.location.toString()),
             //Credit
-            Text('Location:' + user.credit),
+            Text('Credit:' + user.credit.toString()),
             //List of Transactions
             RaisedButton(
               onPressed: () {
@@ -64,7 +54,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       floatingActionButton: isOwner
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('/EditProfileScreen');
+                Navigator.of(context)
+                    .pushNamed('/EditProfileScreen', arguments: currentUser);
               },
               child: Icon(Icons.edit),
             )

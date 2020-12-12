@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shady_market/DATA.dart';
+import 'package:shady_market/screens/profileScreen.dart';
 
 class ANAppDrawer extends StatelessWidget {
   @override
@@ -21,6 +22,10 @@ class ANAppDrawer extends StatelessWidget {
                       backgroundImage:
                           CachedNetworkImageProvider(currentUser.pic)),
                   title: Text(currentUser.name),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ProfileScreen.routeName,
+                        arguments: currentUser);
+                  },
                 ),
                 Divider(),
                 ListTile(

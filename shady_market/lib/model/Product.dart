@@ -12,7 +12,9 @@ class Product {
   double price;
   double rating;
   int no_raters;
+  int quantity;
   String name;
   Product(this.id, this.owner_Id, this.discription, this.pic, this.category,
-      this.tags, this.price, this.rating, this.no_raters, this.name);
+      this.tags, this.price, this.rating, this.no_raters, this.name,
+      {this.quantity = 5});
 }
