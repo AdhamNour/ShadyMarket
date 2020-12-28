@@ -115,17 +115,4 @@ class Product {
         o.no_of_rater == no_of_rater &&
         o.quantity == quantity;
   }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        owner_id.hashCode ^
-        name.hashCode ^
-        description.hashCode ^
-        price.hashCode ^
-        pictureUrl.hashCode ^
-        category.hashCode ^
-        tags.hashCode ^
-        rating.hashCode;
-  }
 }

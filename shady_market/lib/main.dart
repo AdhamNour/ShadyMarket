@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/screens/AuthentecationScreen/AuthentecationUI.dart';
 import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
 
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (ctx) => CurrentUserProvider())
+        ChangeNotifierProvider(create: (ctx) => CurrentUserProvider()),
+        ChangeNotifierProvider(create: (ctx) => ProdcutsListProvider()),
       ],
       child: DistributedApplication(),
     );

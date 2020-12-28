@@ -41,8 +41,25 @@ class AuthentcationLogicUtils {
   static void SignUP(
       {@required String email,
       @required String password,
-      @required String full_name}) {
-    print(
-        "Singing Up For $email with password $password and name is $full_name");
+      @required String full_name}) async {
+    // Sending a POST request
+    const url = 'http://192.168.1.7:4000/sign_up';
+    const headers = {'Content-Type': 'application/json'};
+
+    var body = <String, dynamic>{
+      "email": email,
+      "password": password,
+      "name": full_name
+    };
+// Sending a POST request with headers
+    http.Response response =
+        await http.post(url, body: jsonEncode(body), headers: headers);
+
+    var result = jsonDecode(response.body);
+    if (result['success']) {
+      print('auth success');
+      print(
+          "Singing Up For $email with password $password and name is $full_name");
+    }
   }
 }

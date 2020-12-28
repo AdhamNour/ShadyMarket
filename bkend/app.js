@@ -82,15 +82,14 @@ app.post('/users/edit',check_authentication,(req,res)=>{
 app.post("/sign_up", (req, res) => {
     try {
         var email = req.body.email,
-            password = req.body.password
+            password = req.body.password,
+            name = req.body.name
         console.log(req.body);
-        let query = "INSERT INTO Person (email,password) VALUES (?,?);";
-        dp.query(query, [email, password], (err, results) => {
+        let query = "INSERT INTO Person (email,password,name) VALUES (?,?,?);";
+        dp.query(query, [email, password,name], (err, results) => {
             console.log(results);
-            req.body.token = results['insertId']
             res.json({
                 "success": true,
-                "token": results['insertId']
             })
         })
     } catch (error) {

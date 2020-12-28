@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shady_market/models/Person.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
 
 import './AuthentactionLogic.dart';
 
@@ -139,7 +142,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   ],
                 ),
               ),
-              SocialMediaAuth(),
+              //SocialMediaAuth(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RichText(
@@ -157,7 +160,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                               });
                             })
                     ])),
-              )
+              ),
+              AnimatedButton(
+                  onPressed: () {
+                    Future.delayed(Duration(milliseconds: 300)).then((value) =>
+                        Provider.of<CurrentUserProvider>(context, listen: false)
+                            .currentUser = Person());
+                  },
+                  child: Text("Continue as a guest"))
             ]),
           ),
         ),
