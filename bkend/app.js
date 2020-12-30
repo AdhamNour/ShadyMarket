@@ -213,6 +213,24 @@ app.post('/users/edit',check_authentication,(req,res)=>{
         })
     }
 });
+
+app.get('/users/',check_authentication,(req,res)=>{
+    try {
+            // console.log(req.body);
+        let query = "Select * person  where id = ?";
+        dp.query(query, [req.body.toekn], (err, results) => {
+            // console.log(req.session.token);
+            res.json({
+                "success": true,
+            })
+        })
+    } catch (error) {
+        res.json({
+            "success": false,
+            "error": error
+        })
+    }
+});
 /** Person */
 /**Person Sign in */
 app.post("/sign_up", (req, res) => {
@@ -278,7 +296,7 @@ app.get("/transactions",check_authentication, (req, res) => {
 });
 //=======================//
 //===== TRANSACTIONS ====//
-=======================//
+//=======================//
 
 
 var server = app.listen(4000, () => {
