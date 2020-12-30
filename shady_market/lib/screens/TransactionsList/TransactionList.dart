@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TransactionsPage extends StatelessWidget {
+  static const routeName = '/transactions';
+
   Future prepareTransactions(BuildContext ctx) async {
     const url = 'http://192.168.1.7:4000/transactions';
     const headers = {'Content-Type': 'application/json'};

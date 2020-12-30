@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
+import 'package:shady_market/screens/TransactionsList/TransactionList.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/CreditField.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/GradientButton.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/ImageField.dart';
@@ -155,7 +156,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => Navigator.of(context)
                     .pushNamed(ProductsScreen.routeName, arguments: user.id),
                 text: 'List Products',
-              )
+              ),
+              GradientButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(TransactionsPage.routeName),
+                text: 'List Transaction',
+              ),
             ],
           ),
         ),

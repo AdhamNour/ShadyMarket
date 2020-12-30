@@ -115,6 +115,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             onClick: () {
                               //chatWithOwner(context, _product.ownerID);
                               //TODO: visit owner profile
+                              Navigator.of(context).pushNamed(
+                                  ProfilePage.routeName,
+                                  arguments: productOwner);
                             },
                           ),
                         )),
