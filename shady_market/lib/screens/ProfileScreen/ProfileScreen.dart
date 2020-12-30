@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/CreditField.dart';
+import 'package:shady_market/widget/ProfilePageWidgets/GradientButton.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/ImageField.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/TextField.dart';
 
@@ -25,6 +29,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool _edit = false;
+  TextEditingController _nameTextEditingController,
+      _emailTextEditingController,
+      _locationTextEditingController;
 
   void _editData() {
     setState(() {
@@ -33,9 +40,38 @@ class _ProfilePageState extends State<ProfilePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
+      if (_edit) {
+        final x = Provider.of<CurrentUserProvider>(context, listen: false)
+            .currentUser
+            .copyWith(
+                name: _nameTextEditingController.text,
+                email: _emailTextEditingController.text,
+                location: _locationTextEditingController.text);
+        Provider.of<CurrentUserProvider>(context, listen: false).currentUser =
+            x;
+        Provider.of<CurrentUserProvider>(context, listen: false)
+            .updateCurrentUserData();
+      }
       _edit = !_edit;
+
       print(_edit);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nameTextEditingController = TextEditingController();
+    _emailTextEditingController = TextEditingController();
+    _locationTextEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameTextEditingController.dispose();
+    _emailTextEditingController.dispose();
+    _locationTextEditingController.dispose();
   }
 
   @override
@@ -83,18 +119,23 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               //Profile Image (Image in a field)
-              ProfilePicture(URL: user.pictureUrl),
+              ProfilePicture(
+                URL: user.pictureUrl,
+                isEditing: _edit,
+              ),
               //Name (Text Field)
               ProfileInfo(
                 edit: _edit,
                 info: user.name,
                 title: "Name",
+                controller: _nameTextEditingController,
               ),
               //Email (Text Field)
               ProfileInfo(
                 edit: _edit,
                 info: user.email,
                 title: "Email",
+                controller: _emailTextEditingController,
               ),
               //Credit (Text Field)
               CreditField(
@@ -105,26 +146,31 @@ class _ProfilePageState extends State<ProfilePage> {
               //Location (Text Field)
               ProfileInfo(
                 edit: _edit,
-                info: user.location,
+                info: user.location == null ? "Not Known yet" : user.location,
                 title: "Location",
+                controller: _locationTextEditingController,
               ),
               //List of Products (Button)
-              RaisedButton(
-                onPressed: () => print("Pressed"),
-                child: Text('List Products'),
-                color: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 100.0),
+              GradientButton(
+                onPressed: () => Navigator.of(context)
+                    .pushNamed(ProductsScreen.routeName, arguments: user.id),
+                text: 'List Products',
               )
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _editData,
-        tooltip: _edit ? 'Edit' : "Save",
-        child: Icon(!_edit ? Icons.edit : Icons.check),
-        backgroundColor: !_edit ? Colors.blue : Colors.green,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: (user.id ==
+              Provider.of<CurrentUserProvider>(context, listen: false)
+                  .currentUser
+                  .id)
+          ? FloatingActionButton(
+              onPressed: _editData,
+              tooltip: _edit ? 'Edit' : "Save",
+              child: Icon(!_edit ? Icons.edit : Icons.check),
+              backgroundColor: !_edit ? Colors.blue : Colors.green,
+            )
+          : null, // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

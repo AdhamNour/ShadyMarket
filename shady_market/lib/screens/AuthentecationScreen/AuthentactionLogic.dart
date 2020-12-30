@@ -5,14 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shady_market/providers/ProductsListProvider.dart';
+import 'package:shady_market/utils.dart';
 
 class AuthentcationLogicUtils {
   static void SignIn(
       {@required BuildContext ctx,
       @required String email,
       @required String password}) async {
-    print("Singing In For $email with password $password");
-
 // Sending a POST request
     const url = 'http://192.168.1.7:4000/sign_in';
     const headers = {'Content-Type': 'application/json'};
@@ -24,12 +24,9 @@ class AuthentcationLogicUtils {
 
     var result = jsonDecode(response.body);
     if (result['success']) {
-      //print('auth success');
       // add id to the person
-      print(result);
-
-      Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser = Person(
-          email: email, password: password, id: int.parse(result['token']));
+      Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser =
+          await getUserData(id: result['token']);
     } else {
       showDialog(
           context: ctx,
@@ -59,9 +56,7 @@ class AuthentcationLogicUtils {
 
     var result = jsonDecode(response.body);
     if (result['success']) {
-      print('auth success');
-      print(
-          "Singing Up For $email with password $password and name is $full_name");
+      //TODO: SIGN UP
     }
   }
 }

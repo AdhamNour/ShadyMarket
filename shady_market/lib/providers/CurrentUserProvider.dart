@@ -47,4 +47,8 @@ class CurrentUserProvider extends ChangeNotifier {
   bool get isLogedIn {
     return _currentUser != null;
   }
+
+  void updateCurrentUserData() {
+    //TODO send http request to update tha database
+  }
 }

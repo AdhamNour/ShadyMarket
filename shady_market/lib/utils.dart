@@ -13,4 +13,6 @@ Future<Person> getUserData({int id, int token: 0}) async {
   http.Response response = await http.get(url, headers: headers);
 
   var result = jsonDecode(response.body);
+  Map<String, dynamic> userData = result['users'][0];
+  return Person.fromMap(userData);
 }

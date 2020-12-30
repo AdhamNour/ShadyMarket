@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
 import 'package:shady_market/screens/ProfileScreen/ProfileScreen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -44,35 +45,6 @@ class AppDrawer extends StatelessWidget {
                 ),
                 Divider(),
                 ListTile(
-                    leading: Icon(Icons.shopping_cart),
-                    title: Text('Your Shopping cart'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      //Navigator.of(context).pushNamed(CartScreen.routeName);
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Row(
-                        children: [
-                          Icon(Icons.alarm),
-                          Text("this feature is under implementation")
-                        ],
-                      )));
-                    }),
-                ListTile(
-                  leading: Icon(Icons.favorite),
-                  title: Text('Your Favorites'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    //Navigator.of(context).pushNamed(FavoritesScreen.routeName);
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Row(
-                      children: [
-                        Icon(Icons.alarm),
-                        Text("this feature is under implementation")
-                      ],
-                    )));
-                  },
-                ),
-                ListTile(
                     leading: Icon(Icons.payment),
                     title: Text('Your Orders'),
                     onTap: () {
@@ -89,10 +61,10 @@ class AppDrawer extends StatelessWidget {
                 Divider(),
                 ListTile(
                     leading: Icon(Icons.add_shopping_cart),
-                    title: Text('your product'),
+                    title: Text('your products'),
                     onTap: () {
-                      Navigator.of(context).pop();
-                      //Navigator.of(context).pushNamed(UserProductsScreen.routename);
+                      Navigator.of(context).pushNamed(ProductsScreen.routeName,
+                          arguments: currentUser.id);
                       Scaffold.of(context).showSnackBar(SnackBar(
                           content: Row(
                         children: [
@@ -117,7 +89,10 @@ class AppDrawer extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Log Out'),
-                  onTap: () {},
+                  onTap: () {
+                    Provider.of<CurrentUserProvider>(context, listen: false)
+                        .currentUser = null;
+                  },
                 ),
               ],
             ),

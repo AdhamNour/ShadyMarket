@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class ProfileInfo extends StatefulWidget {
   final title, info, edit;
+  final TextEditingController controller;
 
-  ProfileInfo({this.title, this.info, this.edit});
+  ProfileInfo({this.title, this.info, this.edit, @required this.controller});
 
   @override
   _ProfileInfoState createState() => _ProfileInfoState();
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
-  final TextEditingController data = TextEditingController();
+  TextEditingController data;
   var value;
   final IconList = {
     "Name": Icon(
@@ -29,6 +30,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
   @override
   void initState() {
     super.initState();
+    data = widget.controller;
     data.text = this.widget.info;
     value = this.widget.info;
     data.addListener(() {
@@ -56,13 +58,15 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   child: IconList[widget.title],
                   padding: EdgeInsets.symmetric(horizontal: 10),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    value,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                 ),
               ],
             )));

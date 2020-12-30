@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
 
 class CreditField extends StatefulWidget {
   final title, info, isEdit;
@@ -42,6 +44,10 @@ class _CreditFieldState extends State<CreditField> {
               void save(data) {
                 setState(() {
                   value = data.toString();
+                  Provider.of<CurrentUserProvider>(context, listen: false)
+                      .credit = data;
+                  Provider.of<CurrentUserProvider>(context, listen: false)
+                      .updateCurrentUserData();
                   print(value);
                 });
                 close();

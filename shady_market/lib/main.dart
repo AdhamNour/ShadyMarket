@@ -44,6 +44,8 @@ class DistributedApplication extends StatelessWidget {
       ),
       home: Builder(
         builder: (context) {
+          Provider.of<ProdcutsListProvider>(context, listen: false)
+              .fetchProducts();
           if (Provider.of<CurrentUserProvider>(context).isLogedIn) {
             return ProductsScreen();
           } else {
@@ -52,8 +54,9 @@ class DistributedApplication extends StatelessWidget {
         },
       ),
       routes: {
-        ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+        ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
         ProfilePage.routeName: (ctx) => ProfilePage(),
+        ProductsScreen.routeName: (ctx) => ProductsScreen(),
       },
     );
   }

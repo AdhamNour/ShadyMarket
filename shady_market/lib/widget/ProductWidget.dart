@@ -25,7 +25,7 @@ class ProductWidget extends StatelessWidget {
             ),
           ),
           onTap: () => Navigator.of(context)
-              .pushNamed(ProductDetailsScreen.routeName, arguments: product),
+              .pushNamed(ProductDetailScreen.routeName, arguments: product),
         ),
         footer: Container(
           color: Colors.black54,

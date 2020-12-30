@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:ffi';
+
 class Product {
   final int id; // the id of the product
   final int owner_id; //the owner id of the product
@@ -74,17 +76,17 @@ class Product {
     if (map == null) return null;
 
     return Product(
-      id: map['id'],
-      owner_id: map['owner_id'],
+      id: map['ID'],
+      owner_id: map['OwnerID'],
       name: map['name'],
-      description: map['description'],
-      price: map['price'],
-      pictureUrl: map['pictureUrl'],
-      category: map['category'],
-      tags: map['tags'],
-      rating: map['rating'],
+      description: map['Discription'],
+      price: double.parse(map['price'].toString()),
+      pictureUrl: map['pic'],
+      category: map['Category'],
+      tags: map['Tags'],
+      rating: double.parse(map['rating'].toString()),
       no_of_rater: map['noOfRater'],
-      quantity: map['quantity'],
+      quantity: map['Quantity'],
     );
   }
 

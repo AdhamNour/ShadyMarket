@@ -54,11 +54,11 @@ class Person {
     if (map == null) return null;
 
     return Person(
-      id: map['id'],
+      id: map['ID'],
       email: map['email'],
       name: map['name'],
       password: map['password'],
-      pictureUrl: map['pictureUrl'],
+      pictureUrl: map['pic'],
       location: map['location'],
       credit: map['credit'],
     );

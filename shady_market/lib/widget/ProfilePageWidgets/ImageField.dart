@@ -1,10 +1,11 @@
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter/material.dart';
+import 'package:shady_market/widget/AnimatedButton.dart';
 
 class ProfilePicture extends StatelessWidget {
   final URL;
-
-  const ProfilePicture({this.URL});
+  final isEditing;
+  const ProfilePicture({this.URL, @required this.isEditing});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,26 @@ class ProfilePicture extends StatelessWidget {
             height: 150.0,
             width: 150.0,
             margin: EdgeInsets.only(left: 20, right: 20, top: 100),
-            child: ClipOval(
-                child: Image.network(
-              this.URL,
-              fit: BoxFit.fill,
-            ))),
+            child: Stack(
+              children: [
+                ClipOval(
+                    child: Image.network(
+                  this.URL,
+                  fit: BoxFit.fill,
+                )),
+                if (isEditing)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: AnimatedButton(
+                      child: Icon(Icons.camera),
+                      onPressed: () {
+                        print("Hello");
+                      },
+                    ),
+                  )
+              ],
+            )),
       ]),
     );
   }

@@ -41,11 +41,14 @@ let check_authentication = (req, res, next) => {
  /**Products */
  app.get("/products/",(req,res)=>{
     /**Select product by id */
+    console.log(req.headers);
     try{
-    let offset = req.query.offset;
-    let num_of_products = req.query.num_of_products;
-    let query = "SELECT * FROM products LIMIT ?,?";
+    let offset = req.headers.offset;
+    let num_of_products = req.headers.num_of_products;
+    let query = "SELECT * FROM products ";
+    //Note to Hamid : LIMIT doesn't work
     dp.query(query, [offset,num_of_products], (err, results) => {
+        console.log(results);
         res.json({
             "success": true,
             "data":results
