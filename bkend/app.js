@@ -213,6 +213,32 @@ app.post('/users/edit',check_authentication,(req,res)=>{
         })
     }
 });
+
+app.get('/users/show',(req,res)=>{
+    try {
+            // console.log(req.body);
+        let query = "Select * person  where id = ?";
+        if (req.query.sellerID){
+            dp.query(query, [req.query.buyerID], (err, results) => {
+                res.json({
+                    "success": true,
+                })
+            })
+        } else {
+            dp.query(query, [req.query.token], (err, results) => {
+                res.json({
+                    "success": true,
+                })
+            })
+
+        }
+    } catch (error) {
+        res.json({
+            "success": false,
+            "error": error
+        })
+    }
+});
 /** Person */
 /**Person Sign in */
 app.post("/sign_up", (req, res) => {
@@ -278,7 +304,7 @@ app.get("/transactions",check_authentication, (req, res) => {
 });
 //=======================//
 //===== TRANSACTIONS ====//
-=======================//
+//=======================//
 
 
 var server = app.listen(4000, () => {
