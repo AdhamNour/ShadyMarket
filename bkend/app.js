@@ -214,16 +214,24 @@ app.post('/users/edit',check_authentication,(req,res)=>{
     }
 });
 
-app.get('/users/',check_authentication,(req,res)=>{
+app.get('/users/show',(req,res)=>{
     try {
             // console.log(req.body);
         let query = "Select * person  where id = ?";
-        dp.query(query, [req.body.toekn], (err, results) => {
-            // console.log(req.session.token);
-            res.json({
-                "success": true,
+        if (req.query.sellerID){
+            dp.query(query, [req.query.buyerID], (err, results) => {
+                res.json({
+                    "success": true,
+                })
             })
-        })
+        } else {
+            dp.query(query, [req.query.token], (err, results) => {
+                res.json({
+                    "success": true,
+                })
+            })
+
+        }
     } catch (error) {
         res.json({
             "success": false,
