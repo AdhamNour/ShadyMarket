@@ -25,9 +25,12 @@ class AuthentcationLogicUtils {
 
     var result = jsonDecode(response.body);
     if (result['success']) {
-      print('auth success');
-      Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser =
-          Person(email: email, password: password);
+      //print('auth success');
+      // add id to the person
+      print(result);
+
+      Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser = Person(
+          email: email, password: password, id: int.parse(result['token']));
     } else {
       showDialog(
           context: ctx,
