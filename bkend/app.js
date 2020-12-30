@@ -217,17 +217,23 @@ app.post('/users/edit',check_authentication,(req,res)=>{
 app.get('/users/show',(req,res)=>{
     try {
             // console.log(req.body);
-        let query = "Select * person  where id = ?";
-        if (req.query.sellerID){
-            dp.query(query, [req.query.buyerID], (err, results) => {
+       // console.log(req.headers)
+       let query = "select * from person  where ID = ?";
+        if (req.headers.sellerid){
+            console.log(req.headers.sellerid);
+            dp.query(query, [req.headers.sellerid], (err, results) => {
+                console.log(results)
                 res.json({
                     "success": true,
+                    "users":results
                 })
             })
         } else {
-            dp.query(query, [req.query.token], (err, results) => {
+
+            dp.query(query, [req.headers.token], (err, results) => {
                 res.json({
                     "success": true,
+                    "users":results
                 })
             })
 
