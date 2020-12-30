@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TransactionsPage extends StatelessWidget {
-  Future prepareTransactions(Buildcontext ctx) async {
+  Future prepareTransactions(BuildContext ctx) async {
     const url = 'http://192.168.1.7:4000/transactions';
     const headers = {'Content-Type': 'application/json'};
 
@@ -36,7 +36,7 @@ class TransactionsPage extends StatelessWidget {
         ),
         body: Center(
             child: FutureBuilder(
-          future: prepareTransactions(),
+          future: prepareTransactions(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<Widget> transactions = snapshot.data
