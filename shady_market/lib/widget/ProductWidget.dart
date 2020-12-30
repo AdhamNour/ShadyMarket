@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Product.dart';
+import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
 
 class ProductWidget extends StatelessWidget {
   @override
@@ -10,14 +11,21 @@ class ProductWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridTile(
-        child: CachedNetworkImage(
-          imageUrl: product.pictureUrl,
-          placeholder: (context, url) =>
-              Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => Center(
-            child: Icon(Icons.error),
+        child: InkWell(
+          child: Hero(
+            tag: product.id,
+            child: CachedNetworkImage(
+              imageUrl: product.pictureUrl,
+              placeholder: (context, url) =>
+                  Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => Center(
+                child: Icon(Icons.error),
+              ),
+              fit: BoxFit.fill,
+            ),
           ),
-          fit: BoxFit.fill,
+          onTap: () => Navigator.of(context)
+              .pushNamed(ProductDetailsScreen.routeName, arguments: product),
         ),
         footer: Container(
           color: Colors.black54,

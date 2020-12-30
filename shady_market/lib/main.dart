@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/screens/AuthentecationScreen/AuthentecationUI.dart';
+import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
 import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
+import 'package:shady_market/screens/ProfileScreen/ProfileScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,6 +51,10 @@ class DistributedApplication extends StatelessWidget {
           }
         },
       ),
+      routes: {
+        ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+        ProfilePage.routeName: (ctx) => ProfilePage(),
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/widget/ProductWidget.dart';
+import 'package:shady_market/widget/appDrawer.dart';
 
 class ProductsScreen extends StatelessWidget {
   @override
@@ -21,6 +22,7 @@ class ProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Products Screen"),
       ),
+      drawer: AppDrawer(),
     );
   }
 }
