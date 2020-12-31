@@ -9,16 +9,13 @@ class TransactionsPage extends StatelessWidget {
   static const routeName = '/transactions';
 
   Future prepareTransactions(BuildContext ctx) async {
+    var id =
+        Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser.id;
     const url = 'http://192.168.1.7:4000/transactions';
-    const headers = {'Content-Type': 'application/json'};
+    var headers = {"token": id.toString()};
 
-    var body = <String, dynamic>{
-      "token":
-          Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser.id
-    };
 // Sending a POST request with headers
-    http.Response response =
-        await http.post(url, body: jsonEncode(body), headers: headers);
+    http.Response response = await http.get(url, headers: headers);
 
     var result = jsonDecode(response.body);
     if (result['success']) {
@@ -41,29 +38,37 @@ class TransactionsPage extends StatelessWidget {
           future: prepareTransactions(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              List<Widget> transactions = snapshot.data
-                  .map((element) => Card(
-                        child: Text("Hiiiiiiii"),
-                        shadowColor: Colors.grey,
-                      ))
-                  .toList();
-              return ListView(
-                children: transactions,
-              );
-            } else if (snapshot.data.length == 0) {
-              return Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      "images/empty.png",
+              if (snapshot.data.length == 0) {
+                return Opacity(
+                  opacity: 0.5,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "images/empty.png",
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text("Not Transactions So Far"),
+                        )
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text("Not Transactions So Far"),
-                    )
-                  ],
-                ),
-              );
+                  ),
+                );
+              } else {
+                print(snapshot.data['products']);
+                List<Widget> transactions = [];
+                snapshot.data['products']
+                    .forEach((value) => transactions.add(Card(
+                          child: Text(
+                              "Product id: ${value['product']}\nBuyer id: ${value['buyer']}"),
+                          shadowColor: Colors.grey,
+                        )));
+                return ListView(
+                  children: transactions,
+                );
+              }
             } else {
               return Waiting();
             }
