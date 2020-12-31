@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Product.dart';
 import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
+import 'package:shady_market/utils.dart';
 
 class ProductWidget extends StatelessWidget {
   @override
@@ -46,7 +47,7 @@ class ProductWidget extends StatelessWidget {
                   color: Colors.white,
                   size: 35,
                 ),
-                onPressed: () => print('buy function to be implemented'),
+                onPressed: () => purchaseProduct(product, context),
               )
             ],
           ),

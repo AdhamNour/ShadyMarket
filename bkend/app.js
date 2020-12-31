@@ -159,6 +159,7 @@ app.post("/products/search", (req, res) => {
 //Purchase a Product
 app.post("/products/purchase/", check_authentication, (req, res) => {
     try {
+        console.log(req.body);
         const productID = req.body.id,
             buyerID = req.body.token,
             quantity = req.body.quantity;
@@ -297,7 +298,7 @@ app.post("/sign_in", (req, res) => {
 app.get("/transactions",check_authentication, (req, res) => {
     try {
         const query = "SELECT ID,product,buyer FROM Transaction where buyer = ?;"
-        dp.query(query, [req.body.token],(err, results) => {
+        dp.query(query, [req.headers.token],(err, results) => {
             res.json({
                 "success": true,
                 "products": results

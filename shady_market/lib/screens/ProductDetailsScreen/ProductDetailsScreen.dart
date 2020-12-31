@@ -97,7 +97,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             Icon(Icons.shopping_cart),
                             Colors.deepOrange,
                             onClick: () {
-                              //addToCart(context, _product);
+                              //TODO: purchaseProduct
+                              purchaseProduct(_product,context);
                             },
                           ),
                         )),
@@ -113,8 +114,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             Icon(Icons.account_circle),
                             Colors.deepPurple,
                             onClick: () {
-                              //chatWithOwner(context, _product.ownerID);
-                              //TODO: visit owner profile
                               Navigator.of(context).pushNamed(
                                   ProfilePage.routeName,
                                   arguments: productOwner);
