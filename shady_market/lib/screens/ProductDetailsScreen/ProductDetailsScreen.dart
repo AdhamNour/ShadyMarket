@@ -56,13 +56,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isOwner = _product != null
-        ? (_product.owner_id ==
-            Provider.of<CurrentUserProvider>(context, listen: false)
-                .currentUser
-                .id)
-        : false;
-
+    final currentUser = Provider.of<CurrentUserProvider>(context).currentUser;
+    final isOwner =
+        _product != null ? (_product.owner_id == currentUser.id) : false;
+    print(currentUser.name);
     final size = MediaQuery.of(context).size;
     return Scaffold(
         body: Container(
@@ -86,23 +83,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                       width: 150.0,
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset.fromDirection(
-                        getRadianFromDegree(270), 100 * degOneTranslate.value),
-                    child: Transform.rotate(
-                        angle: rotationAnimation.value,
-                        child: Builder(
-                          builder: (context) => CircularButton(
-                            50,
-                            Icon(Icons.shopping_cart),
-                            Colors.deepOrange,
-                            onClick: () {
-                              //TODO: purchaseProduct
-                              purchaseProduct(_product,context);
-                            },
-                          ),
-                        )),
-                  ),
+                  if (currentUser.name != null)
+                    Transform.translate(
+                      offset: Offset.fromDirection(getRadianFromDegree(270),
+                          100 * degOneTranslate.value),
+                      child: Transform.rotate(
+                          angle: rotationAnimation.value,
+                          child: Builder(
+                            builder: (context) => CircularButton(
+                              50,
+                              Icon(Icons.shopping_cart),
+                              Colors.deepOrange,
+                              onClick: () {
+                                //TODO: purchaseProduct
+                                purchaseProduct(_product, context);
+                              },
+                            ),
+                          )),
+                    ),
                   Transform.translate(
                     offset: Offset.fromDirection(
                         getRadianFromDegree(225), 100 * degOneTranslate.value),
@@ -121,22 +119,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         )),
                   ),
-                  // Transform.translate(
-                  //   offset: Offset.fromDirection(
-                  //       getRadianFromDegree(180), 100 * degOneTranslate.value),
-                  //   child: Transform.rotate(
-                  //     angle: (2 * pi) - rotationAnimation.value,
-                  //     child: CircularButton(
-                  //       50,
-                  //       null,
-                  //       Colors.cyanAccent,
-                  //       doneWidget: Builder(
-                  //         builder: (context) =>
-                  //             buildConsumer(context, _product),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   CircularButton(50, Icon(Icons.add), Colors.blue[900],
                       onClick: () {
                     if (animationController.isCompleted) {

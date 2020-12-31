@@ -4,7 +4,7 @@ var timestamp = require('timestamp')
 
 
 var con = mysql.createConnection({
-    host: "192.168.1.7:3306",
+    host: "localhost",
     user: "root",
     password: "",
     database: "DistroDB",

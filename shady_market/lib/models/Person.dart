@@ -60,7 +60,7 @@ class Person {
       password: map['password'],
       pictureUrl: map['pic'],
       location: map['location'],
-      credit: map['credit'],
+      credit: double.parse(map['Credit'].toString()),
     );
   }
 

@@ -84,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     final Person user = ModalRoute.of(context).settings.arguments as Person;
+    print(user.credit);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -140,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               //Credit (Text Field)
               CreditField(
-                info: "10",
+                info: user.credit.toString(),
                 title: user.credit.toString(),
                 isEdit: _edit,
               ),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Product.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
 import 'package:shady_market/utils.dart';
 
@@ -41,7 +42,7 @@ class ProductWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
+              if(Provider.of<CurrentUserProvider>(context).currentUser.name != null)IconButton(
                 icon: Icon(
                   Icons.shopping_cart,
                   color: Colors.white,

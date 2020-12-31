@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
+import 'package:http/http.dart' as http;
 
 class CurrentUserProvider extends ChangeNotifier {
   Person _currentUser;
@@ -48,7 +51,23 @@ class CurrentUserProvider extends ChangeNotifier {
     return _currentUser != null;
   }
 
-  void updateCurrentUserData() {
+  void updateCurrentUserData() async {
     //TODO send http request to update tha database
+    //FIXME : Bug Here => the app doesn't send any request
+    // Sending a POST request
+    print("hello from update user");
+    const url = 'http://192.168.1.7:4000/users/edit';
+    var headers = {"Content-type": "application/json"};
+    var body = _currentUser.toMap()
+      ..addEntries([MapEntry<String, dynamic>("token", _currentUser.id)]);
+    print(body);
+// Sending a POST request with headers
+    http.Response response = await http.post(url,
+        headers: headers,
+        body: jsonEncode(_currentUser.toMap()
+          ..addEntries([MapEntry<String, dynamic>("token", _currentUser.id)])));
+    print(response.body);
+    //var result = jsonDecode(response.body);
+    //print(result);
   }
 }

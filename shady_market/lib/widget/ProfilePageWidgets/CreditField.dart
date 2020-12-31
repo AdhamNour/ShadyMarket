@@ -45,9 +45,8 @@ class _CreditFieldState extends State<CreditField> {
                 setState(() {
                   value = data.toString();
                   Provider.of<CurrentUserProvider>(context, listen: false)
-                      .credit = data;
-                  Provider.of<CurrentUserProvider>(context, listen: false)
-                      .updateCurrentUserData();
+                      .credit = double.parse(data);
+
                   print(value);
                 });
                 close();

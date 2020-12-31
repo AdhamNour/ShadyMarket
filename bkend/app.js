@@ -6,16 +6,16 @@ const session = require('express-session');
 const rand = (Math.random() * 10) + 1
 var MemoryStore = require('memorystore')(session);
 
+
 var app = express();
 app.use(urlParser);
 app.use(session({
     resave:false,
     secret:"shady",
-    store: new MemoryStore({checkPeriod:10000}),
-    cookie:{maxAge  : 10000}, 
+    store: new MemoryStore({checkPeriod:99999}),
+    cookie:{maxAge  : 99999}, 
     saveUninitialized:false
 }));
-var sess = "";
 /***
  * Entity
  * /signup
@@ -29,9 +29,13 @@ var sess = "";
  */
 
 let check_authentication = (req, res, next) => {
+    console.log(req.session.token);
     if (req.body.token == req.session.token) {
         next();
-    } else {
+    }else if(req.headers.token == req.session.token) {
+        next();
+    }
+     else {
         res.json({
             "success": false,
             "error": "please log in"
@@ -39,16 +43,14 @@ let check_authentication = (req, res, next) => {
     }
 };
  /**Products */
- app.get("/products/",(req,res)=>{
+ app.get("/products",(req,res)=>{
     /**Select product by id */
-    console.log(req.headers);
     try{
     let offset = req.headers.offset;
     let num_of_products = req.headers.num_of_products;
     let query = "SELECT * FROM products ";
     //Note to Hamid : LIMIT doesn't work
     dp.query(query, [offset,num_of_products], (err, results) => {
-        console.log(results);
         res.json({
             "success": true,
             "data":results
@@ -157,9 +159,8 @@ app.post("/products/search", (req, res) => {
     }
 })
 //Purchase a Product
-app.post("/products/purchase/", check_authentication, (req, res) => {
+app.post("/products/purchase", check_authentication, (req, res) => {
     try {
-        console.log(req.body);
         const productID = req.body.id,
             buyerID = req.body.token,
             quantity = req.body.quantity;
@@ -178,6 +179,7 @@ app.post("/products/purchase/", check_authentication, (req, res) => {
                         dp.query(query, [productID, buyerID])
                         res.json({
                             "success": true
+
                         })
                     })
                 })
@@ -196,19 +198,23 @@ app.post("/products/purchase/", check_authentication, (req, res) => {
 
 /** Person */
 app.post('/users/edit',check_authentication,(req,res)=>{
+    //TODO : Search about session token in express session
+    console.log(req.body);
     try {
         var email = req.body.email,
             password = req.body.password,
             pic = req.body.pictureUrl,
             location = req.body.location,
             credit = req.body.credit
-            // console.log(req.body);
         let query = "UPDATE person set email = ? , password = ? , pic = ? , Credit = ? , location = ? where ID = ?";
+        console.log(req.session.token);
         dp.query(query, [email, password,pic,credit,location,req.session.token], (err, results) => {
-            // console.log(req.session.token);
-            res.json({
-                "success": true,
-            })
+            if(!err) {
+                res.json({
+                    "success": true,
+                })
+
+            }
         })
     } catch (error) {
         res.json({
@@ -218,15 +224,12 @@ app.post('/users/edit',check_authentication,(req,res)=>{
     }
 });
 
-app.get('/users/show',(req,res)=>{
+app.get('/users/show',check_authentication,(req,res)=>{
     try {
-            // console.log(req.body);
-       // console.log(req.headers)
+            
        let query = "select * from person  where ID = ?";
         if (req.headers.sellerid){
-            console.log(req.headers.sellerid);
             dp.query(query, [req.headers.sellerid], (err, results) => {
-                console.log(results)
                 res.json({
                     "success": true,
                     "users":results
@@ -256,10 +259,8 @@ app.post("/sign_up", (req, res) => {
         var email = req.body.email,
             password = req.body.password,
             name = req.body.name
-        console.log(req.body);
         let query = "INSERT INTO Person (email,password,name) VALUES (?,?,?);";
         dp.query(query, [email, password,name], (err, results) => {
-            console.log(results);
             res.json({
                 "success": true,
             })
@@ -275,7 +276,6 @@ app.post("/sign_up", (req, res) => {
 app.post("/sign_in", (req, res) => {
     var email = req.body.email,
         password = req.body.password;
-        console.log(req.body);
     const query = "SELECT ID FROM Person WHERE email = ? AND password = ?;";
     dp.query(query, [email, password], (err, results) => {
         if (results.length == 0) {

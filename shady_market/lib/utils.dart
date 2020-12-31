@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/models/Product.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
 
 Future<Person> getUserData({int id, int token: 0}) async {
 // Sending a POST request
@@ -18,10 +20,11 @@ Future<Person> getUserData({int id, int token: 0}) async {
 
   var result = jsonDecode(response.body);
   Map<String, dynamic> userData = result['users'][0];
+  print(userData);
   return Person.fromMap(userData);
 }
 
-Future<bool> purchaseProduct(Product product, BuildContext ctx) {
+void purchaseProduct(Product product, BuildContext ctx) {
   //show dialog box to get the quantity
   int counter = 1;
   showDialog(
@@ -63,13 +66,29 @@ Future<bool> purchaseProduct(Product product, BuildContext ctx) {
           );
         },
       )).then((value) {
-        if(value != null){
-          requestPurchases(product.id, ctx);
-        }
-      });
+    if (value != null) {
+      requestPurchases(product.id, ctx, value);
+    }
+  });
 }
 
-void requestPurchases(int product,BuildContext ctx){
+void requestPurchases(int product, BuildContext ctx, int quantity) async {
   //send the http request to the server
-  print("Hello world!");
+  print("Hello world! from requestPurchases");
+  final currentUser =
+      Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser;
+  // Sending a POST request
+  const url = 'http://192.168.1.7:4000/products/purchase/';
+  var headers = {"Content-type": "application/json"};
+  var body = {
+    "token": currentUser.id.toString(),
+    "id": product,
+    "quantity": quantity.toString()
+  };
+// Sending a POST request with headers
+  http.Response response =
+      await http.post(url, headers: headers, body: jsonEncode(body));
+
+  var result = jsonDecode(response.body);
+  print(result);
 }
