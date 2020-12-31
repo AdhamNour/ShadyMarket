@@ -57,7 +57,6 @@ class TransactionsPage extends StatelessWidget {
                   ),
                 );
               } else {
-                print(snapshot.data['products']);
                 List<Widget> transactions = [];
                 snapshot.data['products']
                     .forEach((value) => transactions.add(Card(
