@@ -5,16 +5,21 @@ var dp = require("./dp");
 const session = require('express-session');
 const rand = (Math.random() * 10) + 1
 var MemoryStore = require('memorystore')(session);
-
+var cookieParser = require('cookie-parser');
 
 var app = express();
 app.use(urlParser);
+app.use(cookieParser());
 app.use(session({
-    resave:false,
-    secret:"shady",
-    store: new MemoryStore({checkPeriod:99999}),
-    cookie:{maxAge  : 99999}, 
-    saveUninitialized:false
+    secret: "shady",
+    name: "mycookie",
+    resave: true,
+    saveUninitialized: true,
+    store:new MemoryStore(),
+    cookie: { 
+        secure: false,
+        maxAge: Date.now() +  6000000
+    }
 }));
 /***
  * Entity
@@ -28,14 +33,22 @@ app.use(session({
  * transactions/{authentication_token} [show:get]
  */
 
-let check_authentication = (req, res, next) => {
-    console.log(req.session.token);
-    if (req.body.token == req.session.token) {
-        next();
-    }else if(req.headers.token == req.session.token) {
+var check_authentication = (req, res, next) => {
+    console.log("Called!")
+    if(req.body.token != undefined){
+        if (req.body.token == req.session.token) {
+           
+            next();
+        
+        }
+    }else if(req.headers.token != undefined){
+        console.log("Called!")
+        if(req.headers.token == req.session.token) {
+            console.log(req.session.token);
+            console.log(req.headers.token);
         next();
     }
-     else {
+}else {
         res.json({
             "success": false,
             "error": "please log in"
@@ -199,6 +212,8 @@ app.post("/products/purchase", check_authentication, (req, res) => {
 /** Person */
 app.post('/users/edit',check_authentication,(req,res)=>{
     //TODO : Search about session token in express session
+    console.log(req.session)
+
     console.log(req.body);
     try {
         var email = req.body.email,
@@ -224,33 +239,35 @@ app.post('/users/edit',check_authentication,(req,res)=>{
     }
 });
 
-app.get('/users/show',check_authentication,(req,res)=>{
-    try {
+app.get('/users/show',(req,res)=>{
+    check_authentication(req,res,()=>{
+        try {
             
-       let query = "select * from person  where ID = ?";
-        if (req.headers.sellerid){
-            dp.query(query, [req.headers.sellerid], (err, results) => {
-                res.json({
-                    "success": true,
-                    "users":results
+            let query = "select * from person  where ID = ?";
+            if (req.headers.sellerid){
+                dp.query(query, [req.headers.sellerid], (err, results) => {
+                    res.json({
+                        "success": true,
+                        "users":results
+                    })
                 })
-            })
-        } else {
-
-            dp.query(query, [req.headers.token], (err, results) => {
-                res.json({
-                    "success": true,
-                    "users":results
+            } else {
+                
+                dp.query(query, [req.headers.token], (err, results) => {
+                    res.json({
+                        "success": true,
+                        "users":results
+                    })
                 })
+                
+            }
+        } catch (error) {
+            res.json({
+                "success": false,
+                "error": error
             })
-
         }
-    } catch (error) {
-        res.json({
-            "success": false,
-            "error": error
-        })
-    }
+    });
 });
 /** Person */
 /**Person Sign in */
