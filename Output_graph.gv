@@ -1,0 +1,155 @@
+digraph Output_graph {
+	"read
+ (0)"
+	"x
+ (1)"
+		"read
+ (0)" -> "x
+ (1)"
+	"if
+ (2)"
+	"0
+ (3)"
+	"<
+ (4)"
+		"<
+ (4)" -> "0
+ (3)"
+	"x
+ (5)"
+		"<
+ (4)" -> "x
+ (5)"
+		"if
+ (2)" -> "<
+ (4)"
+	"assign
+ fact
+ 
+(7)"
+	"1
+ (8)"
+		"assign
+ fact
+ 
+(7)" -> "1
+ (8)"
+	"repeat
+ (9)"
+	"assign
+ fact
+ 
+(11)"
+	"fact
+ (12)"
+	"*
+ (13)"
+		"*
+ (13)" -> "fact
+ (12)"
+	"x
+ (14)"
+		"*
+ (13)" -> "x
+ (14)"
+		"assign
+ fact
+ 
+(11)" -> "*
+ (13)"
+	"assign
+ x
+ 
+(16)"
+	"x
+ (17)"
+	"-
+ (18)"
+		"-
+ (18)" -> "x
+ (17)"
+	"1
+ (19)"
+		"-
+ (18)" -> "1
+ (19)"
+		"assign
+ x
+ 
+(16)" -> "-
+ (18)"
+		"assign
+ fact
+ 
+(11)" -> "assign
+ x
+ 
+(16)"
+	subgraph subgraph0 {
+		graph [rank=same]
+			"assign
+ fact
+ 
+(11)" [color=red]
+			"assign
+ x
+ 
+(16)" [color=red]
+	}
+		"repeat
+ (9)" -> "assign
+ fact
+ 
+(11)"
+	"x
+ (20)"
+	"=
+ (21)"
+		"=
+ (21)" -> "x
+ (20)"
+	"0
+ (22)"
+		"=
+ (21)" -> "0
+ (22)"
+		"repeat
+ (9)" -> "=
+ (21)"
+		"assign
+ fact
+ 
+(7)" -> "repeat
+ (9)"
+	subgraph subgraph1 {
+		graph [rank=same]
+			"assign
+ fact
+ 
+(7)" [color=red]
+			"repeat
+ (9)" [color=red]
+	}
+	"write
+ (23)"
+	"fact
+ (24)"
+		"write
+ (23)" -> "fact
+ (24)"
+		"repeat
+ (9)" -> "write
+ (23)"
+	subgraph subgraph2 {
+		graph [rank=same]
+			"repeat
+ (9)" [color=red]
+			"write
+ (23)" [color=red]
+	}
+		"if
+ (2)" -> "assign
+ fact
+ 
+(7)"
+}

@@ -97,7 +97,7 @@ var check_authentication = (req, res, next) => {
     }
 
  });
- app.post("/products", check_authentication, (req, res) => {
+ app.post("/products", (req, res) => {
     try {
         var OwnerID = req.body.token,
             name = req.body.name,
@@ -120,7 +120,7 @@ var check_authentication = (req, res, next) => {
     }
 
 });
-app.post("/products/", check_authentication, (req, res) => {
+app.post("/products/", (req, res) => {
     try {
         let id = req.body.token;
         const query = "UPDATE Products SET Name=?,Description=?,Quantity=?,pic=?,price=? WHERE ID = ?";
@@ -138,7 +138,7 @@ app.post("/products/", check_authentication, (req, res) => {
     }
 });
 
-app.delete("/products/", check_authentication, (req, res) => {
+app.delete("/products/",  (req, res) => {
     try {
         const query = "DELETE FROM Products WHERE ID = ?;";
         dp.query(query,[req.body.token], (err, results) => {
@@ -172,7 +172,7 @@ app.post("/products/search", (req, res) => {
     }
 })
 //Purchase a Product
-app.post("/products/purchase", check_authentication, (req, res) => {
+app.post("/products/purchase", (req, res) => {
     try {
         const productID = req.body.id,
             buyerID = req.body.token,
@@ -210,7 +210,7 @@ app.post("/products/purchase", check_authentication, (req, res) => {
 /**Products */
 
 /** Person */
-app.post('/users/edit',check_authentication,(req,res)=>{
+app.post('/users/edit',(req,res)=>{
     //TODO : Search about session token in express session
     console.log(req.session)
 
@@ -240,7 +240,6 @@ app.post('/users/edit',check_authentication,(req,res)=>{
 });
 
 app.get('/users/show',(req,res)=>{
-    check_authentication(req,res,()=>{
         try {
             
             let query = "select * from person  where ID = ?";
@@ -267,7 +266,6 @@ app.get('/users/show',(req,res)=>{
                 "error": error
             })
         }
-    });
 });
 /** Person */
 /**Person Sign in */
@@ -312,7 +310,7 @@ app.post("/sign_in", (req, res) => {
 //=======================//
 //===== TRANSACTIONS ====//
 //=======================//
-app.get("/transactions",check_authentication, (req, res) => {
+app.get("/transactions", (req, res) => {
     try {
         const query = "SELECT ID,product,buyer FROM Transaction where buyer = ?;"
         dp.query(query, [req.headers.token],(err, results) => {
