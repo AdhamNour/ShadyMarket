@@ -223,7 +223,7 @@ app.post('/users/edit',(req,res)=>{
             credit = req.body.credit
         let query = "UPDATE person set email = ? , password = ? , pic = ? , Credit = ? , location = ? where ID = ?";
         console.log(req.session.token);
-        dp.query(query, [email, password,pic,credit,location,req.session.token], (err, results) => {
+        dp.query(query, [email, password,pic,credit,location,req.body.token], (err, results) => {
             if(!err) {
                 res.json({
                     "success": true,

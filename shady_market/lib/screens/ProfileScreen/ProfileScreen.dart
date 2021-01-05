@@ -54,8 +54,6 @@ class _ProfilePageState extends State<ProfilePage> {
             .updateCurrentUserData();
       }
       _edit = !_edit;
-
-      print(_edit);
     });
   }
 
@@ -84,7 +82,6 @@ class _ProfilePageState extends State<ProfilePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     final Person user = ModalRoute.of(context).settings.arguments as Person;
-    print(user.credit);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

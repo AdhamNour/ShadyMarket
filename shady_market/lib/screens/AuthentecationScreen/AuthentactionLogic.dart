@@ -23,6 +23,7 @@ class AuthentcationLogicUtils {
         await http.post(url, body: jsonEncode(body), headers: headers);
 
     var result = jsonDecode(response.body);
+    print(result);
     if (result['success']) {
       // add id to the person
       Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser =
@@ -56,7 +57,7 @@ class AuthentcationLogicUtils {
 
     var result = jsonDecode(response.body);
     if (result['success']) {
-      //TODO: SIGN UP
+      //TODO: SIGN UP sucsseful
     }
   }
 }

@@ -95,7 +95,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               Icon(Icons.shopping_cart),
                               Colors.deepOrange,
                               onClick: () {
-                                //TODO: purchaseProduct
                                 purchaseProduct(_product, context);
                               },
                             ),
