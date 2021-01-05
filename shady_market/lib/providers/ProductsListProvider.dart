@@ -27,4 +27,5 @@ class ProdcutsListProvider extends ChangeNotifier {
     data.forEach((e) => _prodcuts.add(Product.fromMap(e)));
     notifyListeners();
   }
+  //FIXME: bring the Update product here and then update _prodcuts with notifylistnenr
 }

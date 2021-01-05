@@ -117,6 +117,7 @@ var check_authentication = (req, res, next) => {
 //});
 app.post("/products/", (req, res) => {
     //edit  Product
+    //FIXME : add product insertion here
     try {
         console.log(req.body)
         const query = "UPDATE products SET name=?,Discription=?,Quantity=?,pic=?,price=? WHERE ID = ?";

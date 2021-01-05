@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/models/Product.dart';
+import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
-import 'package:shady_market/screens/ProductsScreen/ProductsScreen.dart';
-import 'package:shady_market/screens/ProfileScreen/ProfileScreen.dart';
-import 'package:shady_market/screens/TransactionsList/TransactionList.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/CreditField.dart';
-import 'package:shady_market/widget/ProfilePageWidgets/GradientButton.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/ImageField.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/TextField.dart';
 import 'package:shady_market/utils.dart';
@@ -33,7 +30,6 @@ class _ProductEditState extends State<ProductEdit>
 
   AnimationController animationController;
   Animation degOneTranslate, rotationAnimation;
-  Product _product;
   Person productOwner;
 
   void translationalMoving() {
@@ -60,22 +56,29 @@ class _ProductEditState extends State<ProductEdit>
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
     animationController.addListener(translationalMoving);
     Future.delayed(Duration.zero).then((v) {
-      _product = ModalRoute.of(context).settings.arguments as Product;
-      getUserData(id: _product.owner_id).then((v) {
-        setState(() {
-          productOwner = v;
-        });
-      });
       target = ModalRoute.of(context).settings.arguments as Product;
+      if (target != null) {
+        getUserData(id: target.owner_id).then((v) {
+          setState(() {
+            productOwner = v;
+          });
+        });
+      } else {
+        target = Product(
+            owner_id: Provider.of<CurrentUserProvider>(context, listen: false)
+                .currentUser
+                .id,
+            pictureUrl:
+                'https://initiate.alphacoders.com/download/wallpaper/crop-or-stretch/769160/cropped-400-400-769160.jpg/1650283600708680');
+      }
+      setState(() {});
     });
     super.initState();
-
   }
 
   void _editData(Product product) {
     setState(() {
       if (_edit) {
-        //TODO: make adham save the data to the database
         Product newProduct = product.copyWith(
             name: _nameTextEditingController.text,
             description: _emailTextEditingController.text,
@@ -102,12 +105,6 @@ class _ProductEditState extends State<ProductEdit>
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     final size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -214,26 +211,26 @@ class ProductEditScreen extends StatelessWidget {
           children: <Widget>[
             //Profile Image (Image in a field)
             ProfilePicture(
-              URL: target.pictureUrl,
+              URL: target.pictureUrl== null?"": target.pictureUrl,
               isEditing: _edit,
             ),
             //Name (Text Field)
             ProfileInfo(
               edit: _edit,
-              info: target.name,
+              info: target.name== null ? "Not Known yet" : target.name,
               title: "Name",
               controller: _nameTextEditingController,
             ),
             //Email (Text Field)
             ProfileInfo(
               edit: _edit,
-              info: target.description,
+              info: target.description== null ? "Not Known yet" : target.description,
               title: "Description",
               controller: _emailTextEditingController,
             ),
             //Credit (Text Field)
             CreditField(
-              info: target.price.toString(),
+              info: target.price== null? '0' :target.price.toString(),
               title: 'price',
               isEdit: _edit,
               savingFunction: (newValue) {
@@ -241,7 +238,7 @@ class ProductEditScreen extends StatelessWidget {
               },
             ),
             CreditField(
-                info: target.quantity.toString(),
+                info: target.quantity== null?'0':target.quantity.toString(),
                 title: 'quantity',
                 isEdit: _edit,
                 savingFunction: (newValue) {
@@ -261,17 +258,6 @@ class ProductEditScreen extends StatelessWidget {
               controller:
                   _tagsTextEditingController, //FIXME : change the controller
             ),
-            //List of Products (Button)
-            // GradientButton(
-            //   onPressed: () => Navigator.of(context)
-            //       .pushNamed(ProductsScreen.routeName, arguments: target.id),
-            //   text: 'List Products',
-            // ),
-            // GradientButton(
-            //   onPressed: () =>
-            //       Navigator.of(context).pushNamed(TransactionsPage.routeName),
-            //   text: 'List Transaction',
-            // ),
           ],
         ),
       ),

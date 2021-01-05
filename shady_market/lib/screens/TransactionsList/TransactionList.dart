@@ -4,6 +4,7 @@ import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/widget/waiting.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+//FIXME: reimplement this
 
 class TransactionsPage extends StatelessWidget {
   static const routeName = '/transactions';
