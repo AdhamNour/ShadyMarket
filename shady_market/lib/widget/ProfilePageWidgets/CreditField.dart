@@ -3,21 +3,38 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
 
 class CreditField extends StatefulWidget {
-  final title, info, isEdit;
-
-  const CreditField({this.title, this.info, this.isEdit});
+  final title, info, isEdit, savingFunction;
+  // function save
+  const CreditField({this.title, this.info, this.isEdit, this.savingFunction});
 
   @override
   _CreditFieldState createState() => _CreditFieldState();
 }
 
 class _CreditFieldState extends State<CreditField> {
-  var value;
+  var value, save, Title;
 
   @override
   void initState() {
     super.initState();
     value = widget.info;
+    if (widget.title == null) {
+      Title = 'Credit';
+    } else {
+      Title = widget.title;
+    }
+    if (widget.savingFunction == null) {
+      save = (data) {
+        setState(() {
+          Provider.of<CurrentUserProvider>(context, listen: false).credit =
+              double.parse(data);
+
+          print(value);
+        });
+      };
+    } else {
+      save = widget.savingFunction;
+    }
   }
 
   void _addCredit({context}) {
@@ -41,19 +58,8 @@ class _CreditFieldState extends State<CreditField> {
                 Navigator.pop(context);
               }
 
-              void save(data) {
-                setState(() {
-                  value = data.toString();
-                  Provider.of<CurrentUserProvider>(context, listen: false)
-                      .credit = double.parse(data);
-
-                  print(value);
-                });
-                close();
-              }
-
               return AlertDialog(
-                title: Text("Change Credit"),
+                title: Text("Change " + Title),
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -71,7 +77,15 @@ class _CreditFieldState extends State<CreditField> {
                         'Discard',
                         style: TextStyle(color: Colors.red),
                       )),
-                  FlatButton(onPressed: () => save(data), child: Text('Save')),
+                  FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          value = data.toString();
+                        });
+                        save(data);
+                        close();
+                      },
+                      child: Text('Save')),
                 ],
               );
             })).then((_) => setState(() {}));
@@ -94,7 +108,7 @@ class _CreditFieldState extends State<CreditField> {
                         _addCredit(context: context);
                       });
                     },
-                    child: Text("Add Credit"),
+                    child: Text("Add " + this.Title),
                   ),
                 ))
               : Container()
@@ -105,15 +119,13 @@ class _CreditFieldState extends State<CreditField> {
 }
 
 class Credit extends StatelessWidget {
-  Credit({
-    Key key,
-    @required this.value,
-  }) : super(key: key);
+  Credit({Key key, @required this.value, this.ICON}) : super(key: key);
 
-  var value;
+  var value, ICON;
 
   @override
   Widget build(BuildContext context) {
+    var val = this.ICON == null ? Icons.monetization_on : this.ICON;
     return Expanded(
       child: Card(
         child: Container(
@@ -129,7 +141,7 @@ class Credit extends StatelessWidget {
                 Container(
                   alignment: Alignment.center,
                   child: Icon(
-                    Icons.monetization_on,
+                    val,
                     color: Colors.blue,
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 10),

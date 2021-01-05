@@ -73,8 +73,6 @@ void purchaseProduct(Product product, BuildContext ctx) {
 }
 
 void requestPurchases(int product, BuildContext ctx, int quantity) async {
-  //send the http request to the server
-  print("Hello world! from requestPurchases");
   final currentUser =
       Provider.of<CurrentUserProvider>(ctx, listen: false).currentUser;
   // Sending a POST request
@@ -91,4 +89,13 @@ void requestPurchases(int product, BuildContext ctx, int quantity) async {
 
   var result = jsonDecode(response.body);
   print(result);
+}
+
+void updateProduct(Product product) async {
+  //TODO: send Http request to the server
+  const url = 'http://192.168.1.7:4000/products/';
+  var headers = {"Content-type": "application/json"};
+  var body = product.toJson();
+  http.Response response = await http.post(url, headers: headers, body: body);
+  print(response.body);
 }

@@ -34,18 +34,12 @@ app.use(session({
  */
 
 var check_authentication = (req, res, next) => {
-    console.log("Called!")
     if(req.body.token != undefined){
         if (req.body.token == req.session.token) {
-           
             next();
-        
         }
     }else if(req.headers.token != undefined){
-        console.log("Called!")
         if(req.headers.token == req.session.token) {
-            console.log(req.session.token);
-            console.log(req.headers.token);
         next();
     }
 }else {
@@ -97,34 +91,37 @@ var check_authentication = (req, res, next) => {
     }
 
  });
- app.post("/products", (req, res) => {
-    try {
-        var OwnerID = req.body.token,
-            name = req.body.name,
-            Description = req.body.description,
-            Quantity = req.body.quantity,
-            pic = req.body.pic,
-            price = req.body.price;
-        const query = "INSERT INTO Products (OwnerID,Name,Description,Quantity,pic,price) VALUES (?,?,?,?,?,?);";
-        dp.query(query, [OwnerID, name, Description, Quantity, pic, price], (err, results) => {
-            res.json({
-                "success": true,
-                "products": results
-            })
-        })
-    } catch (error) {
-        res.json({
-            "success": false,
-            "error": error
-        })
-    }
+//  app.post("/products", (req, res) => {
+//      //Post new product
+//     try {
+//         var OwnerID = req.body.token,
+//             name = req.body.name,
+//             Description = req.body.description,
+//             Quantity = req.body.quantity,
+//             pic = req.body.pic,
+//             price = req.body.price;
+//         const query = "INSERT INTO Products (OwnerID,Name,Description,Quantity,pic,price) VALUES (?,?,?,?,?,?);";
+//         dp.query(query, [OwnerID, name, Description, Quantity, pic, price], (err, results) => {
+//             res.json({
+//                 "success": true,
+//                 "products": results
+//             })
+//         })
+//     } catch (error) {
+//         res.json({
+//             "success": false,
+//             "error": error
+//         })
+//     }
 
-});
+//});
 app.post("/products/", (req, res) => {
+    //edit  Product
     try {
-        let id = req.body.token;
-        const query = "UPDATE Products SET Name=?,Description=?,Quantity=?,pic=?,price=? WHERE ID = ?";
-        dp.query(query, [req.body.name, req.body.description, req.body.quantity, req.body.pic, req.body.price, id], (err, results) => {
+        console.log(req.body)
+        const query = "UPDATE products SET name=?,Discription=?,Quantity=?,pic=?,price=? WHERE ID = ?";
+        dp.query(query, [req.body.name, req.body.description, req.body.quantity, req.body.pic, req.body.price, req.body.id], (err, results) => {
+            if(err) throw err;
             res.json({
                 "success": true
             })
@@ -212,18 +209,16 @@ app.post("/products/purchase", (req, res) => {
 /** Person */
 app.post('/users/edit',(req,res)=>{
     //TODO : Search about session token in express session
-    console.log(req.session)
-
-    console.log(req.body);
+    
     try {
         var email = req.body.email,
-            password = req.body.password,
             pic = req.body.pictureUrl,
             location = req.body.location,
-            credit = req.body.credit
-        let query = "UPDATE person set email = ? , password = ? , pic = ? , Credit = ? , location = ? where ID = ?";
-        console.log(req.session.token);
-        dp.query(query, [email, password,pic,credit,location,req.body.token], (err, results) => {
+            credit = req.body.credit,
+            name = req.body.name;
+        let query = "UPDATE person set email = ? , name = ? , pic = ? , Credit = ? , location = ?  where ID = ?";
+        dp.query(query, [email, name,pic,credit,location,req.body.token], (err, results) => {
+            if (err) throw err;
             if(!err) {
                 res.json({
                     "success": true,

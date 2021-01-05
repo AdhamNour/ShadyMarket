@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/models/Product.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/screens/ProductEdit/ProductEdit.dart';
 import 'package:shady_market/screens/ProfileScreen/ProfileScreen.dart';
 import 'package:shady_market/utils.dart';
 import 'package:shady_market/widget/SABT.dart';
@@ -70,20 +71,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
             product: _product,
             productOwner: productOwner,
           ),
-          if (!isOwner)
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  IgnorePointer(
-                    child: Container(
-                      height: 150.0,
-                      width: 150.0,
-                    ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                IgnorePointer(
+                  child: Container(
+                    height: 150.0,
+                    width: 150.0,
                   ),
-                  if (currentUser.name != null)
+                ),
+                if (currentUser.name != null)
+                  if (!isOwner)
                     Transform.translate(
                       offset: Offset.fromDirection(getRadianFromDegree(270),
                           100 * degOneTranslate.value),
@@ -100,6 +101,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             ),
                           )),
                     ),
+                if (!isOwner)
                   Transform.translate(
                     offset: Offset.fromDirection(
                         getRadianFromDegree(225), 100 * degOneTranslate.value),
@@ -118,17 +120,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         )),
                   ),
-                  CircularButton(50, Icon(Icons.add), Colors.blue[900],
-                      onClick: () {
-                    if (animationController.isCompleted) {
-                      animationController.reverse();
-                    } else {
-                      animationController.forward();
-                    }
-                  }),
-                ],
-              ),
+                  if (isOwner)
+                  Transform.translate(
+                    offset: Offset.fromDirection(
+                        getRadianFromDegree(180), 100 * degOneTranslate.value),
+                    child: Transform.rotate(
+                        angle: rotationAnimation.value,
+                        child: Builder(
+                          builder: (context) => CircularButton(
+                            50,
+                            Icon(Icons.edit),
+                            Colors.green,
+                            onClick: () {
+                              Navigator.of(context).pushNamed(
+                                  ProductEdit.routeName,
+                                  arguments: _product);
+                            },
+                          ),
+                        )),
+                  ),
+                CircularButton(50, Icon(Icons.add), Colors.blue[900],
+                    onClick: () {
+                  if (animationController.isCompleted) {
+                    animationController.reverse();
+                  } else {
+                    animationController.forward();
+                  }
+                }),
+              ],
             ),
+          ),
         ],
       ),
       height: size.height,

@@ -63,7 +63,7 @@ class Product {
       'name': name,
       'description': description,
       'price': price,
-      'pictureUrl': pictureUrl,
+      'pic': pictureUrl,
       'category': category,
       'tags': tags,
       'rating': rating,

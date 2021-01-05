@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shady_market/models/Product.dart';
-import 'package:shady_market/providers/CurrentUserProvider.dart';
 import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/widget/ProductWidget.dart';
 import 'package:shady_market/widget/appDrawer.dart';
