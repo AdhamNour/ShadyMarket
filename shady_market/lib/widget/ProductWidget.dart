@@ -10,6 +10,7 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridTile(

@@ -7,11 +7,34 @@ import 'package:shady_market/screens/ProductEdit/ProductEdit.dart';
 import 'package:shady_market/widget/ProductWidget.dart';
 import 'package:shady_market/widget/appDrawer.dart';
 
-class ProductsScreen extends StatelessWidget {
+class ProductsScreen extends StatefulWidget {
   static const String routeName = "/ProductsScreen";
+
+  @override
+  _ProductsScreenState createState() => _ProductsScreenState();
+}
+
+class _ProductsScreenState extends State<ProductsScreen> {
+  bool showSearchBar = false;
+  TextEditingController _searchTextEditingController;
+  String felteringString = "";
+
   void showEditProductScreen(BuildContext context) {
     Navigator.of(context).pushNamed(ProductEdit.routeName);
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTextEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchTextEditingController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var products = Provider.of<ProdcutsListProvider>(context).prodcuts;
@@ -27,6 +50,21 @@ class ProductsScreen extends StatelessWidget {
       });
       products = filteredProducts;
     }
+    if (felteringString.trim().isNotEmpty) {
+      List<Product> filteredProducts = [];
+      products.forEach((e) {
+        print(felteringString.trim());
+        print(e.name);
+        print((e.name.contains(felteringString.trim())));
+        if (e.name.contains(felteringString.trim())) {
+          filteredProducts.add(e);
+        }
+        filteredProducts.forEach((element) {print("\t${element.name}");});
+      });
+      products = List<Product>.from(filteredProducts);
+      products.forEach((e)=>print("\t\t${e.name}"));
+
+    }
     return Scaffold(
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -34,20 +72,39 @@ class ProductsScreen extends StatelessWidget {
         itemBuilder: (context, index) => Provider(
           child: ProductWidget(),
           create: (context) => products[index],
+          key: ObjectKey(products[index]),
         ),
         itemCount: products.length,
       ),
       appBar: AppBar(
-        title: Text("Products Screen"),
+        title: showSearchBar
+            ? TextField(
+                controller: _searchTextEditingController,
+                onSubmitted: (value) => setState(() => felteringString = value),
+              )
+            : Text("Products Screen"),
         actions: [
-          if (isOwner) IconButton(icon: Icon(Icons.add), onPressed: () => showEditProductScreen(context),)
+          if (isOwner)
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => showEditProductScreen(context),
+            ),
+          IconButton(
+              icon: Icon(showSearchBar ? Icons.cancel : Icons.search),
+              onPressed: () {
+                setState(() {
+                  showSearchBar = !showSearchBar;
+                });
+              })
         ],
       ),
       drawer: AppDrawer(),
-      floatingActionButton: (isOwner)? FloatingActionButton(
-        onPressed: () => showEditProductScreen(context),
-        child: Icon(Icons.add),
-      ):null,
+      floatingActionButton: (isOwner)
+          ? FloatingActionButton(
+              onPressed: () => showEditProductScreen(context),
+              child: Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

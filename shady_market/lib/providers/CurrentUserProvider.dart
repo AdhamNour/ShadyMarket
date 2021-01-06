@@ -52,8 +52,6 @@ class CurrentUserProvider extends ChangeNotifier {
   }
 
   void updateCurrentUserData() async {
-    //TODO send http request to update tha database
-    //FIXME : Bug Here => the app doesn't send any request
     // Sending a POST request
     print("hello from update user");
     const url = 'http://192.168.1.7:4000/users/edit';

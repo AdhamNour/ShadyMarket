@@ -256,7 +256,7 @@ class ProductEditScreen extends StatelessWidget {
               info: target.tags == null ? "Not Known yet" : target.tags,
               title: "tags",
               controller:
-                  _tagsTextEditingController, //FIXME : change the controller
+                  _tagsTextEditingController, 
             ),
           ],
         ),
