@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/models/Product.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/screens/ProductEdit/ProductEdit.dart';
 import 'package:shady_market/screens/ProfileScreen/ProfileScreen.dart';
 import 'package:shady_market/utils.dart';
@@ -104,7 +105,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 if (!isOwner)
                   Transform.translate(
                     offset: Offset.fromDirection(
-                        getRadianFromDegree(225), 100 * degOneTranslate.value),
+                        getRadianFromDegree(180), 100 * degOneTranslate.value),
                     child: Transform.rotate(
                         angle: rotationAnimation.value,
                         child: Builder(
@@ -139,6 +140,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         )),
                   ),
+                  if (isOwner)
+                    Transform.translate(
+                      offset: Offset.fromDirection(getRadianFromDegree(270),
+                          100 * degOneTranslate.value),
+                      child: Transform.rotate(
+                          angle: rotationAnimation.value,
+                          child: Builder(
+                            builder: (context) => CircularButton(
+                              50,
+                              Icon(Icons.delete),
+                              Colors.red,
+                              onClick: () {
+                                //TODO: Delete item
+                                 //Add are you sure things
+                              Provider.of<ProdcutsListProvider>(context, listen: false).deleteProduct(_product);
+                              Navigator.of(context).pop();
+                              },
+                            ),
+                          )),
+                    ),
                 CircularButton(50, Icon(Icons.add), Colors.blue[900],
                     onClick: () {
                   if (animationController.isCompleted) {

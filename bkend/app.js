@@ -137,14 +137,41 @@ app.post("/products/", (req, res) => {
 });
 
 app.delete("/products/",  (req, res) => {
+    console.log(req.headers)
     try {
         const query = "DELETE FROM Products WHERE ID = ?;";
-        dp.query(query,[req.body.token], (err, results) => {
+        dp.query(query,[req.headers.id], (err, results) => {
             res.json({
                 "success": true
             })
         })
     } catch (error) {
+        res.json({
+            "success": false,
+            "error": error
+        })
+    }
+})
+
+app.post("/products/add/", (req, res) => {
+    console.log(req.body)
+    var name = req.body.name,
+        pic = req.body.pic,
+        Tags = req.body.Tags,
+        Category = req.body.Category,
+        price = req.body.price,
+        OwnerID = req.body.OwnerID,
+        Discription = req.body.Discription,
+        Quantity = req.body.Quantity;
+    try {
+        const query = "INSERT INTO products (name,OwnerID,Discription,Quantity,Category,Tags,price,pic) VALUES (?,?,?,?,?,?,?,?)";
+        dp.query(query, [name,OwnerID,Discription,Quantity,Category,Tags,price,pic], (err, results)=>{
+            if(err) throw err
+            res.json({
+                "success":true
+            })
+        })
+    }catch (error) {
         res.json({
             "success": false,
             "error": error

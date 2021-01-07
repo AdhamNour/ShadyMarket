@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shady_market/models/Person.dart';
 import 'package:shady_market/models/Product.dart';
 import 'package:shady_market/providers/CurrentUserProvider.dart';
+import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/screens/ProductDetailsScreen/ProductDetailsScreen.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/CreditField.dart';
 import 'package:shady_market/widget/ProfilePageWidgets/ImageField.dart';
@@ -76,7 +77,7 @@ class _ProductEditState extends State<ProductEdit>
     super.initState();
   }
 
-  void _editData(Product product) {
+  void _editData(Product product,BuildContext ctx) {
     setState(() {
       if (_edit) {
         Product newProduct = product.copyWith(
@@ -86,7 +87,7 @@ class _ProductEditState extends State<ProductEdit>
             tags: _tagsTextEditingController.text
             //TODO: Add URL Edit
             );
-        updateProduct(newProduct);
+        Provider.of<ProdcutsListProvider>(ctx, listen: false).updateProduct(newProduct);
       }
       Navigator.of(context).pop();
 
@@ -132,7 +133,26 @@ class _ProductEditState extends State<ProductEdit>
                   ),
                   Transform.translate(
                     offset: Offset.fromDirection(
-                        getRadianFromDegree(255), 100 * degOneTranslate.value),
+                        getRadianFromDegree(270), 100 * degOneTranslate.value),
+                    child: Transform.rotate(
+                        angle: rotationAnimation.value,
+                        child: Builder(
+                          builder: (context) => CircularButton(
+                            50,
+                            Icon(Icons.delete),
+                            Colors.red,
+                            onClick: (){
+                              //TODO: delete item
+                              //Add are you sure things
+                              Provider.of<ProdcutsListProvider>(context, listen: false).deleteProduct(target);
+                              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                            },
+                          ),
+                        )),
+                  ),
+                  Transform.translate(
+                    offset: Offset.fromDirection(
+                        getRadianFromDegree(225), 100 * degOneTranslate.value),
                     child: Transform.rotate(
                         angle: rotationAnimation.value,
                         child: Builder(
@@ -140,20 +160,20 @@ class _ProductEditState extends State<ProductEdit>
                             50,
                             Icon(Icons.save),
                             Colors.green,
-                            onClick: () => _editData(target),
+                            onClick: () => _editData(target,context),
                           ),
                         )),
                   ),
                   Transform.translate(
                     offset: Offset.fromDirection(
-                        getRadianFromDegree(190), 100 * degOneTranslate.value),
+                        getRadianFromDegree(180), 100 * degOneTranslate.value),
                     child: Transform.rotate(
                         angle: rotationAnimation.value,
                         child: Builder(
                           builder: (context) => CircularButton(
                             50,
                             Icon(Icons.cancel),
-                            Colors.red,
+                            Colors.deepOrange,
                             onClick: () {
                               Navigator.of(context).pop();
                             },

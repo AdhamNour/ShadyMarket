@@ -27,5 +27,23 @@ class ProdcutsListProvider extends ChangeNotifier {
     data.forEach((e) => _prodcuts.add(Product.fromMap(e)));
     notifyListeners();
   }
-  //FIXME: bring the Update product here and then update _prodcuts with notifylistnenr
+
+  void updateProduct(Product product) async {
+    const url = 'http://192.168.1.7:4000/products/';
+    var headers = {"Content-type": "application/json"};
+    var body = product.toJson();
+    http.Response response = await http.post(url, headers: headers, body: body);
+    print(response.body);
+    int index = _prodcuts.indexOf(product);
+    _prodcuts[index] = product;
+    
+  }
+
+  void deleteProduct(Product product) async {
+    const url = 'http://192.168.1.7:4000/products/';
+    var headers = {"Content-type": "application/json","id": product.id.toString()};
+    http.Response response = await http.delete(url, headers: headers, );
+    _prodcuts.remove(product);
+    notifyListeners();
+  }
 }

@@ -32,25 +32,38 @@ class ProductWidget extends StatelessWidget {
         ),
         footer: Container(
           color: Colors.black54,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              Expanded(
-                child: Center(
+              Center(
                   child: Text(
-                    product.name,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                "Price:${product.price}\$",
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        product.name,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
                   ),
-                ),
+                  if (Provider.of<CurrentUserProvider>(context)
+                          .currentUser
+                          .name !=
+                      null)
+                    IconButton(
+                      icon: Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                        size: 35,
+                      ),
+                      onPressed: () => purchaseProduct(product, context),
+                    )
+                ],
               ),
-              if(Provider.of<CurrentUserProvider>(context).currentUser.name != null)IconButton(
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                  size: 35,
-                ),
-                onPressed: () => purchaseProduct(product, context),
-              )
             ],
           ),
         ),
