@@ -157,12 +157,12 @@ app.post("/products/add/", (req, res) => {
     console.log(req.body)
     var name = req.body.name,
         pic = req.body.pic,
-        Tags = req.body.Tags,
-        Category = req.body.Category,
+        Tags = req.body.tags,
+        Category = req.body.category,
         price = req.body.price,
-        OwnerID = req.body.OwnerID,
-        Discription = req.body.Discription,
-        Quantity = req.body.Quantity;
+        OwnerID = req.body.owner_id,
+        Discription = req.body.description,
+        Quantity = req.body.quantity;
     try {
         const query = "INSERT INTO products (name,OwnerID,Discription,Quantity,Category,Tags,price,pic) VALUES (?,?,?,?,?,?,?,?)";
         dp.query(query, [name,OwnerID,Discription,Quantity,Category,Tags,price,pic], (err, results)=>{

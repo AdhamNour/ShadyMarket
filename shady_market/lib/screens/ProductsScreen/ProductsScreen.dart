@@ -27,6 +27,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void initState() {
     super.initState();
     _searchTextEditingController = TextEditingController();
+    Future.delayed(Duration.zero).then((_)  {
+      Provider.of<ProdcutsListProvider>(context,listen: false).fetchProducts();
+    });
   }
 
   @override

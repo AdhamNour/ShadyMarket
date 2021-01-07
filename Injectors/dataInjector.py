@@ -26,12 +26,12 @@ for i in range(10):
     r = requests.post("http://192.168.1.7:4000/products/add/",
                         json={
                             "name": lorem.get_word(count=random.randint(1, 5)),
-                            "pic":abailablePics[random.randint(0,len(abailablePics))],
-                            'Tags':"Anime",
-                            "Category":"Anime",
+                            "pic":abailablePics[random.randint(0,len(abailablePics)-1)],
+                            'tags':"Anime",
+                            "category":"Anime",
                             'price':random.randint(1,150000),
-                            "OwnerID":13,
-                            'Discription':lorem.get_paragraph(count = random.randint(1,10)),
-                            "Quantity":random.randint(1,100),
+                            "owner_id":13,
+                            'description':lorem.get_paragraph(count = random.randint(1,10)),
+                            "quantity":random.randint(1,100),
                             })
     print(r.text)

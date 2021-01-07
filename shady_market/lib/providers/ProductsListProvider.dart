@@ -36,14 +36,29 @@ class ProdcutsListProvider extends ChangeNotifier {
     print(response.body);
     int index = _prodcuts.indexOf(product);
     _prodcuts[index] = product;
-    
   }
 
   void deleteProduct(Product product) async {
     const url = 'http://192.168.1.7:4000/products/';
-    var headers = {"Content-type": "application/json","id": product.id.toString()};
-    http.Response response = await http.delete(url, headers: headers, );
+    var headers = {
+      "Content-type": "application/json",
+      "id": product.id.toString()
+    };
+    http.Response response = await http.delete(
+      url,
+      headers: headers,
+    );
     _prodcuts.remove(product);
+    notifyListeners();
+  }
+
+  void addProduct(Product product) async {
+    const url = 'http://192.168.1.7:4000/products/add/';
+    var headers = {"Content-type": "application/json"};
+    var body = product.toJson();
+    http.Response response = await http.post(url, headers: headers, body: body);
+    print(response.body);
+    _prodcuts.add(product);
     notifyListeners();
   }
 }

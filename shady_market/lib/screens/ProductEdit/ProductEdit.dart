@@ -13,6 +13,7 @@ import 'package:shady_market/widget/ProfilePageWidgets/TextField.dart';
 import 'package:shady_market/utils.dart';
 
 Product target;
+bool isNewProduct;
 
 class ProductEdit extends StatefulWidget {
   static const String routeName = '/ProductEdit';
@@ -64,6 +65,7 @@ class _ProductEditState extends State<ProductEdit>
             productOwner = v;
           });
         });
+        isNewProduct = false;
       } else {
         target = Product(
             owner_id: Provider.of<CurrentUserProvider>(context, listen: false)
@@ -71,13 +73,14 @@ class _ProductEditState extends State<ProductEdit>
                 .id,
             pictureUrl:
                 'https://initiate.alphacoders.com/download/wallpaper/crop-or-stretch/769160/cropped-400-400-769160.jpg/1650283600708680');
+        isNewProduct = true;
       }
       setState(() {});
     });
     super.initState();
   }
 
-  void _editData(Product product,BuildContext ctx) {
+  void _editData(Product product, BuildContext ctx) {
     setState(() {
       if (_edit) {
         Product newProduct = product.copyWith(
@@ -87,7 +90,44 @@ class _ProductEditState extends State<ProductEdit>
             tags: _tagsTextEditingController.text
             //TODO: Add URL Edit
             );
-        Provider.of<ProdcutsListProvider>(ctx, listen: false).updateProduct(newProduct);
+        if (newProduct.quantity == null) {
+          showDialog(
+              context: ctx,
+              child: AlertDialog(
+                title: Text("There's some error occured while editing"),
+                content: Text("The Quantity of your product is not modified"),
+                actions: [
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("OK"))
+                ],
+              ));
+              return;
+        }
+        else if (newProduct.price == null) {
+          showDialog(
+              context: ctx,
+              child: AlertDialog(
+                title: Text("There's some error occured while editing"),
+                content: Text("The Price of your product is not modified"),
+                actions: [
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("OK"))
+                ],
+              ));
+              return;
+        }
+        var x = Provider.of<ProdcutsListProvider>(ctx, listen: false);
+        if (isNewProduct) {
+          x.addProduct(newProduct);
+        } else {
+          x.updateProduct(newProduct);
+        }
       }
       Navigator.of(context).pop();
 
@@ -141,11 +181,14 @@ class _ProductEditState extends State<ProductEdit>
                             50,
                             Icon(Icons.delete),
                             Colors.red,
-                            onClick: (){
+                            onClick: () {
                               //TODO: delete item
                               //Add are you sure things
-                              Provider.of<ProdcutsListProvider>(context, listen: false).deleteProduct(target);
-                              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                              Provider.of<ProdcutsListProvider>(context,
+                                      listen: false)
+                                  .deleteProduct(target);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/', (route) => false);
                             },
                           ),
                         )),
@@ -160,7 +203,7 @@ class _ProductEditState extends State<ProductEdit>
                             50,
                             Icon(Icons.save),
                             Colors.green,
-                            onClick: () => _editData(target,context),
+                            onClick: () => _editData(target, context),
                           ),
                         )),
                   ),
@@ -231,26 +274,28 @@ class ProductEditScreen extends StatelessWidget {
           children: <Widget>[
             //Profile Image (Image in a field)
             ProfilePicture(
-              URL: target.pictureUrl== null?"": target.pictureUrl,
+              URL: target == null ? "":(target.pictureUrl == null ? "" : target.pictureUrl),
               isEditing: _edit,
             ),
             //Name (Text Field)
             ProfileInfo(
               edit: _edit,
-              info: target.name== null ? "Not Known yet" : target.name,
+              info: target.name == null ? "Not Known yet" : target.name,
               title: "Name",
               controller: _nameTextEditingController,
             ),
             //Email (Text Field)
             ProfileInfo(
               edit: _edit,
-              info: target.description== null ? "Not Known yet" : target.description,
+              info: target.description == null
+                  ? "Not Known yet"
+                  : target.description,
               title: "Description",
               controller: _emailTextEditingController,
             ),
             //Credit (Text Field)
             CreditField(
-              info: target.price== null? '0' :target.price.toString(),
+              info: target.price == null ? '0' : target.price.toString(),
               title: 'price',
               isEdit: _edit,
               savingFunction: (newValue) {
@@ -258,7 +303,8 @@ class ProductEditScreen extends StatelessWidget {
               },
             ),
             CreditField(
-                info: target.quantity== null?'0':target.quantity.toString(),
+                info:
+                    target.quantity == null ? '0' : target.quantity.toString(),
                 title: 'quantity',
                 isEdit: _edit,
                 savingFunction: (newValue) {
@@ -275,8 +321,7 @@ class ProductEditScreen extends StatelessWidget {
               edit: _edit,
               info: target.tags == null ? "Not Known yet" : target.tags,
               title: "tags",
-              controller:
-                  _tagsTextEditingController, 
+              controller: _tagsTextEditingController,
             ),
           ],
         ),
