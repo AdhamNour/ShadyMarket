@@ -91,30 +91,7 @@ var check_authentication = (req, res, next) => {
     }
 
  });
-//  app.post("/products", (req, res) => {
-//      //Post new product
-//     try {
-//         var OwnerID = req.body.token,
-//             name = req.body.name,
-//             Description = req.body.description,
-//             Quantity = req.body.quantity,
-//             pic = req.body.pic,
-//             price = req.body.price;
-//         const query = "INSERT INTO Products (OwnerID,Name,Description,Quantity,pic,price) VALUES (?,?,?,?,?,?);";
-//         dp.query(query, [OwnerID, name, Description, Quantity, pic, price], (err, results) => {
-//             res.json({
-//                 "success": true,
-//                 "products": results
-//             })
-//         })
-//     } catch (error) {
-//         res.json({
-//             "success": false,
-//             "error": error
-//         })
-//     }
 
-//});
 app.post("/products/", (req, res) => {
     //edit  Product
     //FIXME : add product insertion here

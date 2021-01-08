@@ -27,6 +27,28 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       _emailTextEditingController,
       _passwordTextEditingController,
       _confirmPasswordTextEditingController;
+
+  void save() {
+    if(!_formKey.currentState.validate()){
+      return;
+    }
+    if (isSignUP) {
+      AuthentcationLogicUtils.SignUP(
+          email: _emailTextEditingController.text,
+          password: _passwordTextEditingController.text,
+          full_name: _fullNameTextEditingController.text,
+          ctx: context);
+          setState(() {
+            isSignUP = !isSignUP;
+          });
+    } else {
+      AuthentcationLogicUtils.SignIn(
+          email: _emailTextEditingController.text,
+          password: _passwordTextEditingController.text,
+          ctx: context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -113,6 +135,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                               myFocusNode: _confirmPasswordFocusNode,
                               textEditingController:
                                   _confirmPasswordTextEditingController,
+                                  validator: (newValue) {
+                                    if(newValue != _passwordTextEditingController.text){
+                                      return 'Please, double check your password';
+                                    }
+                                    return null;
+                                  },
                             )
                           : Container(),
                       height: isSignUP ? 80 : 0,
@@ -122,17 +150,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       onPressed: () {
                         Future.delayed(Duration(milliseconds: 300))
                             .then((value) {
-                          if (isSignUP) {
-                            AuthentcationLogicUtils.SignUP(
-                                email: _emailTextEditingController.text,
-                                password: _passwordTextEditingController.text,
-                                full_name: _fullNameTextEditingController.text);
-                          } else {
-                            AuthentcationLogicUtils.SignIn(
-                                email: _emailTextEditingController.text,
-                                password: _passwordTextEditingController.text,
-                                ctx: context);
-                          }
+                          save();
                         });
                       },
                       colors: isSignUP

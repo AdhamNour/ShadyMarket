@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shady_market/widget/AnimatedButton.dart';
 
 class ProfilePicture extends StatelessWidget {
-  final URL;
+  var URL;
   final isEditing;
-  const ProfilePicture({this.URL, @required this.isEditing});
+   ProfilePicture({this.URL, @required this.isEditing});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,21 @@ class ProfilePicture extends StatelessWidget {
                     child: AnimatedButton(
                       child: Icon(Icons.camera),
                       onPressed: () {
-                        print("Hello");
+                        TextEditingController controller = TextEditingController();
+                        showDialog(
+                            context: context,
+                            child: AlertDialog(
+                                title: Text("Add Photo"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("Please add The URL of your picture"),
+                                    TextField(controller: controller,)
+                                  ],
+                                ),actions: [
+                                  FlatButton.icon(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.done), label: Text("Done")),
+                                  FlatButton.icon(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.cancel), label: Text("Cancel"))
+                                ],)).then((value) => URL=controller.text);
                       },
                     ),
                   )

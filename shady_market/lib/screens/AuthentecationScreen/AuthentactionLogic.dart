@@ -13,12 +13,12 @@ class AuthentcationLogicUtils {
       {@required BuildContext ctx,
       @required String email,
       @required String password}) async {
-// Sending a POST request
+      // Sending a POST request
     const url = 'http://192.168.1.7:4000/sign_in';
     const headers = {'Content-Type': 'application/json'};
 
     var body = <String, dynamic>{"email": email, "password": password};
-// Sending a POST request with headers
+    // Sending a POST request with headers
     http.Response response =
         await http.post(url, body: jsonEncode(body), headers: headers);
 
@@ -41,7 +41,8 @@ class AuthentcationLogicUtils {
   static void SignUP(
       {@required String email,
       @required String password,
-      @required String full_name}) async {
+      @required String full_name,
+      @required BuildContext ctx,}) async {
     // Sending a POST request
     const url = 'http://192.168.1.7:4000/sign_up';
     const headers = {'Content-Type': 'application/json'};
@@ -58,6 +59,10 @@ class AuthentcationLogicUtils {
     var result = jsonDecode(response.body);
     if (result['success']) {
       //TODO: SIGN UP sucsseful
+      showDialog(context:ctx, child:AlertDialog(
+        title: Text("Sign Up success"),
+        content: Text("You can sign in with your account now"),
+      ));
     }
   }
 }

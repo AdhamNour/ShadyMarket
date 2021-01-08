@@ -58,7 +58,7 @@ class CurrentUserProvider extends ChangeNotifier {
     var headers = {"Content-type": "application/json"};
     var body = _currentUser.toMap()
       ..addEntries([MapEntry<String, dynamic>("token", _currentUser.id)]);
-    //print(body);
+    print(body);
 // Sending a POST request with headers
     http.Response response = await http.post(url,
         headers: headers,

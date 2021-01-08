@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:shady_market/models/Product.dart';
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 class ProdcutsListProvider extends ChangeNotifier {
   List<Product> _prodcuts = [];
+  int nextExpectedID =0;
 
   List<Product> get prodcuts {
     return [..._prodcuts];
@@ -24,7 +26,11 @@ class ProdcutsListProvider extends ChangeNotifier {
     http.Response response = await http.get(url, headers: headers);
     Map<String, dynamic> responseMap = jsonDecode(response.body);
     List<dynamic> data = responseMap['data'];
-    data.forEach((e) => _prodcuts.add(Product.fromMap(e)));
+    data.forEach((e) {
+      var x = Product.fromMap(e);
+      nextExpectedID = max(x.id, nextExpectedID);
+      _prodcuts.add(x);
+    });
     notifyListeners();
   }
 
@@ -58,7 +64,7 @@ class ProdcutsListProvider extends ChangeNotifier {
     var body = product.toJson();
     http.Response response = await http.post(url, headers: headers, body: body);
     print(response.body);
-    _prodcuts.add(product);
+    _prodcuts.add(product.copyWith(id : nextExpectedID));
     notifyListeners();
   }
 }
