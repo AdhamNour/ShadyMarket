@@ -1,11 +1,14 @@
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shady_market/providers/ProductsListProvider.dart';
 import 'package:shady_market/widget/AnimatedButton.dart';
 
 class ProfilePicture extends StatelessWidget {
   var URL;
   final isEditing;
-   ProfilePicture({this.URL, @required this.isEditing});
+  void Function(String newValue) onSave ;
+   ProfilePicture({this.URL, @required this.isEditing,@required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,10 @@ class ProfilePicture extends StatelessWidget {
                                 ),actions: [
                                   FlatButton.icon(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.done), label: Text("Done")),
                                   FlatButton.icon(onPressed: () => Navigator.of(context).pop(), icon: Icon(Icons.cancel), label: Text("Cancel"))
-                                ],)).then((value) => URL=controller.text);
+                                ],)).then((value) {
+                                  onSave(controller.text);
+                                  Provider.of<ProdcutsListProvider>(context, listen: false).fetchProducts();
+                                });
                       },
                     ),
                   )
@@ -69,3 +75,5 @@ class ProfilePicture extends StatelessWidget {
     );
   }
 }
+
+

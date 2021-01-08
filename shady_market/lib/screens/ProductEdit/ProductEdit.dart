@@ -244,7 +244,7 @@ class _ProductEditState extends State<ProductEdit>
   }
 }
 
-class ProductEditScreen extends StatelessWidget {
+class ProductEditScreen extends StatefulWidget {
   ProductEditScreen({
     Key key,
     @required bool edit,
@@ -266,6 +266,11 @@ class ProductEditScreen extends StatelessWidget {
   final TextEditingController _tagsTextEditingController;
 
   @override
+  _ProductEditScreenState createState() => _ProductEditScreenState();
+}
+
+class _ProductEditScreenState extends State<ProductEditScreen> {
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Center(
@@ -275,29 +280,34 @@ class ProductEditScreen extends StatelessWidget {
             //Profile Image (Image in a field)
             ProfilePicture(
               URL: target == null ? "":(target.pictureUrl == null ? "" : target.pictureUrl),
-              isEditing: _edit,
+              isEditing: widget._edit,
+              onSave:(newValue) {
+                setState(() {
+                  target= target.copyWith(pictureUrl: newValue);
+                });
+              } ,
             ),
             //Name (Text Field)
             ProfileInfo(
-              edit: _edit,
+              edit: widget._edit,
               info: target.name == null ? "Not Known yet" : target.name,
               title: "Name",
-              controller: _nameTextEditingController,
+              controller: widget._nameTextEditingController,
             ),
             //Email (Text Field)
             ProfileInfo(
-              edit: _edit,
+              edit: widget._edit,
               info: target.description == null
                   ? "Not Known yet"
                   : target.description,
               title: "Description",
-              controller: _emailTextEditingController,
+              controller: widget._emailTextEditingController,
             ),
             //Credit (Text Field)
             CreditField(
               info: target.price == null ? '0' : target.price.toString(),
               title: 'price',
-              isEdit: _edit,
+              isEdit: widget._edit,
               savingFunction: (newValue) {
                 target = target.copyWith(price: double.parse(newValue));
               },
@@ -306,22 +316,22 @@ class ProductEditScreen extends StatelessWidget {
                 info:
                     target.quantity == null ? '0' : target.quantity.toString(),
                 title: 'quantity',
-                isEdit: _edit,
+                isEdit: widget._edit,
                 savingFunction: (newValue) {
                   target = target.copyWith(quantity: int.parse(newValue));
                 }),
             //Location (Text Field)
             ProfileInfo(
-              edit: _edit,
+              edit: widget._edit,
               info: target.category == null ? "Not Known yet" : target.category,
               title: "category",
-              controller: _categoryTextEditingController,
+              controller: widget._categoryTextEditingController,
             ),
             ProfileInfo(
-              edit: _edit,
+              edit: widget._edit,
               info: target.tags == null ? "Not Known yet" : target.tags,
               title: "tags",
-              controller: _tagsTextEditingController,
+              controller: widget._tagsTextEditingController,
             ),
           ],
         ),

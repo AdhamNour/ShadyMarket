@@ -121,6 +121,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ProfilePicture(
                 URL: user.pictureUrl,
                 isEditing: _edit,
+                onSave: (newValue) {
+                  setState(() {
+                    Provider.of<CurrentUserProvider>(context, listen: false)
+                        .pictureUrl = newValue;
+                  });
+                },
               ),
               //Name (Text Field)
               ProfileInfo(
