@@ -58,7 +58,7 @@ class AnimatedTextFormField extends StatelessWidget {
           focusNode: myFocusNode,
           onSaved: onSaved,
           validator: validator,
-          //obscureText: name.toLowerCase().contains("password"),
+          obscureText: name.toLowerCase().contains("password"),
           controller: textEditingController,
         ),
       ),
