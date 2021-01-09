@@ -56,7 +56,6 @@ var check_authentication = (req, res, next) => {
     let offset = req.headers.offset;
     let num_of_products = req.headers.num_of_products;
     let query = "SELECT * FROM products ";
-    //Note to Hamid : LIMIT doesn't work
     dp.query(query, [offset,num_of_products], (err, results) => {
         res.json({
             "success": true,
@@ -94,7 +93,6 @@ var check_authentication = (req, res, next) => {
 
 app.post("/products/", (req, res) => {
     //edit  Product
-    //FIXME : add product insertion here
     try {
         console.log(req.body)
         const query = "UPDATE products SET name=?,Discription=?,Quantity=?,pic=?,price=? WHERE ID = ?";
