@@ -43,21 +43,7 @@ class AppDrawer extends StatelessWidget {
                   title: Text('All Products'),
                   onTap: () => Navigator.of(context).pushReplacementNamed('/'),
                 ),
-                Divider(),
-                ListTile(
-                    leading: Icon(Icons.payment),
-                    title: Text('Your Orders'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      //Navigator.of(context).pushNamed(OrdersScreen.routeName);
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Row(
-                        children: [
-                          Icon(Icons.alarm),
-                          Text("this feature is under implementation")
-                        ],
-                      )));
-                    }),
+                
                 Divider(),
                 ListTile(
                     leading: Icon(Icons.add_shopping_cart),
@@ -73,18 +59,6 @@ class AppDrawer extends StatelessWidget {
                         ],
                       )));
                     }),
-                Divider(),
-                ...List<Widget>.generate(
-                    10,
-                    (index) => ListTile(
-                          leading: Icon(Icons.apps),
-                          title: Text('Shop section no. $index'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text('it is just a place holder')));
-                          },
-                        )),
                 Divider(),
                 ListTile(
                   leading: Icon(Icons.exit_to_app),

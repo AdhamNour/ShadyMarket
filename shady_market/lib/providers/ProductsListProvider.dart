@@ -40,8 +40,7 @@ class ProdcutsListProvider extends ChangeNotifier {
     var body = product.toJson();
     http.Response response = await http.post(url, headers: headers, body: body);
     print(response.body);
-    int index = _prodcuts.indexOf(product);
-    _prodcuts[index] = product;
+    fetchProducts();
   }
 
   void deleteProduct(Product product) async {
